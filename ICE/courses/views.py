@@ -29,14 +29,15 @@ class ModuleCreate(View):
     def post(self, request, id):
 
         course = Course.objects.get(title__iexact = id)
-        position = Module.objects.filter(course = course).count()
         bound_module = ModuleForm(request.POST)
 
   
         if bound_module.is_valid():
             obj = bound_module.save(commit = False)
             obj.course = course
-            obj.position = position + 1 #if not specified explicitly
+            if 'position' not in request.POST:
+                position = Module.objects.filter(course = course).count()
+                obj.position = position + 1 #if not specified explicitly
             obj.save()
             return redirect(course)
               
