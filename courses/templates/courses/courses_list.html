@@ -1,0 +1,9 @@
+<h1>List of course created by you</h1>
+<h2>Hey {{courses.0.instructor}}! </h2>
+
+{% for course in courses %}
+    <h3>{{course.title}}</h3>
+   
+    <p>{{course.description}}</p>
+    <a href = "{{ course.get_absolute_url }}">View Details</a>
+{% endfor %}

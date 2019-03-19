@@ -1,0 +1,57 @@
+<h1>{{course.title}}</h1>
+{{course.id}}
+
+{% for module in modules%}
+    <h3>{{module.title}}</h3>
+    <p>{{module.position}}</p>
+    <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
+    <button class = "add" id = "{{module.position}}">Add Component</button>
+    <div id = "box{{module.position}}"></div>
+{% endfor %}
+
+{%load static%}
+
+    <br>
+    <button id = "new">Add module</button>
+
+<script>
+    var newModuleButton  = document.getElementById('new');
+    newModuleButton.addEventListener("click", function() {
+
+        document.location.href = "{% url 'create_module_url' course.id %}";
+    });
+
+
+
+    var buttons = document.getElementsByClassName('add');
+    for(i = 0; i < buttons.length; i++)
+    {
+       // buttons[i].addEventListener("click", myFunction);
+    }
+    
+
+
+function myFunction(e) {
+    //alert("Button " + e.target.id + " was clicked.");
+    var box = document.getElementById("box" + e.target.id);
+    var message = "<p>Please Input Title of the component:<p>";
+    message += "<input type = 'text'>";
+    message += "<button class = 'confirm' id = 'confirm" + e.target.id + "'> Submit </button>";
+    box.innerHTML = message;
+
+    var button = document.getElementsByClassName('confirm');
+    //alert(button.length);
+    for (i = 0; i < button.length; i++) {
+    button[i].addEventListener("click", anotherFunction);
+    }
+
+}
+
+function anotherFunction(e) {
+   //console.log(e.target.id);
+
+    var box = document.getElementById("box" + e.target.id[e.target.id.length - 1]);
+    box.innerHTML = "";
+}
+
+</script>
