@@ -16,7 +16,13 @@ def course_detail(request, slug):
     course = Course.objects.get(slug__iexact = slug)
     modules = Module.objects.filter(course = course).order_by('position')
     component = Component.objects.get(title = "First Component")
-    return render(request, "courses/course_detail.html", context = {"course" : course , "modules" : modules, "component" : component})
+    components = []
+    for module in modules:
+        elem = Component.objects.filter(module = module)
+        module.components = elem
+
+    
+    return render(request, "courses/course_detail.html", context = {"course" : course , "modules" : modules, "component" : component, "components": components})
 
 #def manage_module(request, slug):
 

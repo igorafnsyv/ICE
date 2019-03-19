@@ -1,10 +1,22 @@
 <h1>{{course.title}}</h1>
-{{course.id}}
+{#{course.id}#}
 
 {% for module in modules%}
     <h3>{{module.title}}</h3>
-    <p>{{module.position}}</p>
+    <p>{#{module.position}#}</p>
     <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
+
+    {% for comp in module.components%}
+      <p>  {{comp}} </p>
+      {% if comp.image %}
+        <img src="{{ comp.image.url }}" alt="My image" width = 150, length = 150>
+      {%endif%}
+      {% if comp.body %}
+        <p>{{ comp.body }}</p>
+      {%endif%}
+    {%endfor%}
+
+    <br>
     <button class = "add" id = "{{module.position}}">Add Component</button>
     <div id = "box{{module.position}}"></div>
 {% endfor %}

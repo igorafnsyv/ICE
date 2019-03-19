@@ -37,7 +37,7 @@ class Module(models.Model):
 class Component(models.Model):
     title = models.CharField(max_length = 50, db_index = True)
     body = models.TextField(blank = True) #either Text component or image component
-    image = models.ImageField(upload_to = 'images/')
+    image = models.ImageField(upload_to = 'images/', blank = True)
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add = True) #needs to keep constant somehow
     date_update = models.DateTimeField(auto_now_add = True)
