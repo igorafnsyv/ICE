@@ -4,30 +4,28 @@ from django.http import HttpResponse
 
 from django.views.generic import View
 
-from .forms import ModuleForm
+from .forms import ModuleForm, ComponentForm
 # Create your views here.
 
 def courses_list(request):
-    #has to return all courses that were created by this Instructor
+    #has to return all courses that were created by this paticular Instructor
     courses = Course.objects.filter(instructor = "Dutch Van Der Linde") #assume this is default tutor now. How to get the name of the logged in tutor?
     return render(request, "courses/courses_list.html", context = {'courses' : courses})
 
-def course_detail(request, slug):
+def course_detail(request, slug):   #shows details of the particular course
     course = Course.objects.get(slug__iexact = slug)
     modules = Module.objects.filter(course = course).order_by('position')
-    component = Component.objects.get(title = "First Component")
+    #component = Component.objects.get(title = "First Component") #check this
     components = []
     for module in modules:
         elem = Component.objects.filter(module = module)
-        module.components = elem
-
-    
-    return render(request, "courses/course_detail.html", context = {"course" : course , "modules" : modules, "component" : component, "components": components})
+        module.components = elem        #stores each component related to that module in module object
+    return render(request, "courses/course_detail.html", context = {"course" : course , "modules" : modules, "components": components})
 
 #def manage_module(request, slug):
 
 
-class ModuleCreate(View):
+class ModuleCreate(View):       #class based view to override Post function
     def get (self, request, id):
         courseID = Course.objects.get(id = id)
         form = ModuleForm()
@@ -48,3 +46,13 @@ class ModuleCreate(View):
             obj.save()
             return redirect(course)
               
+
+class ComponentCreate(View):
+    #def get #should be used to create an interface for component creation
+    def post(self, request, id):
+        module = Module.objects.filter(title__iexact = id)
+        course = module[0].course
+        component = Component.objects.create(title = 'Freshly added component', body = 'There is some text. Trust me, I am an Engineer', module = module[0])
+        component_image = Component.objects.create(title = 'Image of Component', image = '/images/blame.jpg', module = module[0])
+        return redirect(course)
+

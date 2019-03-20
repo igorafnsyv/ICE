@@ -4,66 +4,80 @@
 {% for module in modules%}
     <h3>{{module.title}}</h3>
     <p>{#{module.position}#}</p>
-    <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
+
 
     {% for comp in module.components%}
-      <p>  {{comp}} </p>
+      <h4>  {{comp}} </h4>
       {% if comp.image %}
         <img src="{{ comp.image.url }}" alt="My image" width = 150, length = 150>
       {%endif%}
       {% if comp.body %}
         <p>{{ comp.body }}</p>
       {%endif%}
+      <br>
     {%endfor%}
 
-    <br>
-    <button class = "add" id = "{{module.position}}">Add Component</button>
+    <!--<button class = "add" id = "{{module.position}}">Add Component</button> -->
+    
+    <form action ="{% url 'create_component_url' module.title %}" method = "post">
+        {% csrf_token %}
+        <input type = 'hidden' value = = '{{module.id}}' name = "id">
+        <button type = "submit">Add Component</button>
+    </form>
+
     <div id = "box{{module.position}}"></div>
 {% endfor %}
 
-{%load static%}
+
+
+
 
     <br>
     <button id = "new">Add module</button>
 
+
+
+
+
 <script>
-    var newModuleButton  = document.getElementById('new');
-    newModuleButton.addEventListener("click", function() {
+      var newModuleButton  = document.getElementById('new');
+      newModuleButton.addEventListener("click", function() {
 
-        document.location.href = "{% url 'create_module_url' course.id %}";
-    });
-
-
-
-    var buttons = document.getElementsByClassName('add');
-    for(i = 0; i < buttons.length; i++)
-    {
-       // buttons[i].addEventListener("click", myFunction);
-    }
-    
+          document.location.href = "{% url 'create_module_url' course.id %}";
+      });
 
 
-function myFunction(e) {
-    //alert("Button " + e.target.id + " was clicked.");
-    var box = document.getElementById("box" + e.target.id);
-    var message = "<p>Please Input Title of the component:<p>";
-    message += "<input type = 'text'>";
-    message += "<button class = 'confirm' id = 'confirm" + e.target.id + "'> Submit </button>";
-    box.innerHTML = message;
 
-    var button = document.getElementsByClassName('confirm');
-    //alert(button.length);
-    for (i = 0; i < button.length; i++) {
-    button[i].addEventListener("click", anotherFunction);
-    }
+      var buttons = document.getElementsByClassName('add');
+      for(i = 0; i < buttons.length; i++)
+      {
+        // buttons[i].addEventListener("click", myFunction);
+      }
+      
 
-}
+  /*
+  function myFunction(e) {
+      //alert("Button " + e.target.id + " was clicked.");
+      var box = document.getElementById("box" + e.target.id);
+      var message = "<p>Please Input Title of the component:<p>";
+      message += "<input type = 'text'>";
+      message += "<button class = 'confirm' id = 'confirm" + e.target.id + "'> Submit </button>";
+      box.innerHTML = message;
 
-function anotherFunction(e) {
-   //console.log(e.target.id);
+      var button = document.getElementsByClassName('confirm');
+      //alert(button.length);
+      for (i = 0; i < button.length; i++) {
+      button[i].addEventListener("click", anotherFunction);
+      }
 
-    var box = document.getElementById("box" + e.target.id[e.target.id.length - 1]);
-    box.innerHTML = "";
-}
+  }
 
+  function anotherFunction(e) {
+    //console.log(e.target.id);
+
+      var box = document.getElementById("box" + e.target.id[e.target.id.length - 1]);
+      box.innerHTML = "";
+  }
+
+  */
 </script>
