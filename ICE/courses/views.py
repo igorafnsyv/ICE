@@ -29,7 +29,9 @@ class ModuleCreate(View):       #class based view to override Post function
     def get (self, request, id):
         courseID = Course.objects.get(id = id)
         form = ModuleForm()
-        return render (request, 'courses/module_create.html', context = {'form' : form, 'courseID' : courseID})
+        component_form = ComponentForm()
+        components = Component.objects.filter(module = None)
+        return render (request, 'courses/module_create.html', context = {'form' : form, 'courseID' : courseID, 'comp_form' :component_form, 'components': components})
 
     def post(self, request, id): #update to track position of insertion
 

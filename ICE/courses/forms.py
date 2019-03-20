@@ -18,4 +18,4 @@ class ModuleForm(forms.ModelForm):
 class ComponentForm(forms.ModelForm):
     class Meta:
         model = Component
-        fields = ['title', 'body', 'image']
+        fields = ['module']
