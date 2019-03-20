@@ -21,6 +21,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('courses/', include('courses.urls')),
+    path('quiz/', include('quiz.urls')),
 ]
 
 if settings.DEBUG:
