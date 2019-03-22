@@ -1,0 +1,21 @@
+<h3>{{module.title}} </h3>
+
+<form action = "{% url 'add_component_url' module.id %}" method = "POST">
+{% csrf_token %}
+{% for component in components%}
+        <h4>Please select the component to add to current module</h4>
+        {{component}}
+        <br>
+        {% for field in form %}
+                <br>
+                {{field.label}}
+                
+                {{field}}
+                
+                <input type = "hidden" name = "componentID" value = "{{component.id}}">
+        {% endfor %}
+{% endfor %}
+<br>
+<br>
+<button type = "submit">Submit</button>
+</form>

@@ -6,7 +6,7 @@ class Course(models.Model):
     title = models.CharField(max_length = 150, db_index = True)
     description = models.TextField(blank = False)
     slug = models.SlugField(max_length=150, unique = True) #later actually can change
-    #Instructor
+    
     instructor = models.CharField(max_length = 40, db_index = True) #later link it ot actual instructor
     #current_Learners -> learners who are taking course now
     #completed_Learners learner who has already completed the course
@@ -38,7 +38,7 @@ class Component(models.Model):
     title = models.CharField(max_length = 50, db_index = True)
     body = models.TextField(blank = True) #either Text component or image component
     image = models.ImageField(upload_to = 'images/', blank = True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null = True, blank = True)
     module = models.ForeignKey(Module, on_delete=models.CASCADE, null = True, blank = True)
     date_created = models.DateTimeField(auto_now_add = True) #needs to keep constant somehow
     date_update = models.DateTimeField(auto_now_add = True)

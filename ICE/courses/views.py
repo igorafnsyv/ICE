@@ -34,7 +34,6 @@ class ModuleCreate(View):       #class based view to override Post function
         return render (request, 'courses/module_create.html', context = {'form' : form, 'courseID' : courseID, 'comp_form' :component_form, 'components': components})
 
     def post(self, request, id): #update to track position of insertion
-
         course = Course.objects.get(title__iexact = id)
         bound_module = ModuleForm(request.POST)
 
@@ -51,10 +50,29 @@ class ModuleCreate(View):       #class based view to override Post function
 
 class ComponentCreate(View):
     #def get #should be used to create an interface for component creation
+    def get(self, request, id):
+        component_form = ComponentForm()
+        components = Component.objects.filter(module = None)
+        module = Module.objects.get(id = id)
+        return render(request, 'courses/add_existing_component.html', context = {'form' : component_form, 'module' : module, 'components' : components})
     def post(self, request, id):
-        module = Module.objects.filter(title__iexact = id)
-        course = module[0].course
-        component = Component.objects.create(title = 'Freshly added component', body = 'There is some text. Trust me, I am an Engineer', module = module[0])
-        component_image = Component.objects.create(title = 'Image of Component', image = '/images/blame.jpg', module = module[0])
+
+        #might result in a case that component is associated with module but not with course
+        module = Module.objects.filter(id__iexact = id)
+        i = 0
+        for componentID in request.POST.getlist('componentID'):
+            component = Component.objects.get(id__iexact = componentID)
+            if request.POST.getlist('module')[i]:
+                module = Module.objects.get(id__iexact = request.POST.getlist('module')[i])
+                i += 1
+                component.module = module
+                component.save()
+                course = component.module.course
         return redirect(course)
+
+
+class QuizAdd(View):
+    def get(self, request, id):
+        module = Module.objects.get(id = id)
+         
 

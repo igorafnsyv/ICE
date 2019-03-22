@@ -1,5 +1,6 @@
 from django import forms
 from .models import Course, Module, Component
+from quiz.models import QuizBank
 from django.core.exceptions import ValidationError
 
 class ModuleForm(forms.ModelForm):
@@ -18,4 +19,10 @@ class ModuleForm(forms.ModelForm):
 class ComponentForm(forms.ModelForm):
     class Meta:
         model = Component
-        fields = ['module']
+        fields = ['module', 'id']
+ #   title = forms.IntegerField(widget=forms.HiddenInput)
+
+#class QuizForm(forms.ModelForm):
+    #class Meta:
+        #model = QuizBank
+        
