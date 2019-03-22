@@ -1,0 +1,22 @@
+<h3>{{module.title}}</h3>
+
+<form action = "{% url 'add_quiz_url' module.id %}" method = "POST">
+    {% csrf_token %}
+    {% for quiz_bank in quiz_banks %}
+
+    <h4>Please, select the quiz bank and module for it</h4>
+    {{quiz_bank}}
+    <br>
+    {% for field in form %}
+        <br>
+        {{field.lable}}
+        {{field}}
+
+        <input type = "hidden" name = "quiz_bank_id" value = "{{quiz_bank.id}}">
+        {% endfor %}
+    {% endfor %}
+
+    <br>
+    <br>
+    <button type = "submit">Submit</button>
+</form>

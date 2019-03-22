@@ -3,6 +3,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.quiz_list),   
+    path('add_quiz/<str:id>', views.QuizAdd.as_view(), name = 'add_quiz_url'),   
 ]
 

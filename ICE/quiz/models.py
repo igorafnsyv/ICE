@@ -6,7 +6,7 @@ class QuizBank(models.Model):
     title = models.CharField(max_length = 50, db_index = True)
     #instuctor
     required_score = models.IntegerField()
-    module = models.ForeignKey(Module, on_delete = models.CASCADE)
+    module = models.ForeignKey(Module, on_delete = models.CASCADE, null = True, blank = True)
     #questions
     def __str__(self):
         return self.title
@@ -14,7 +14,7 @@ class QuizBank(models.Model):
 
 class Question(models.Model):
     body = models.CharField(max_length = 100)
-    quiz = models.ForeignKey(QuizBank, on_delete= models.CASCADE)
+    quizBank = models.ForeignKey(QuizBank, on_delete= models.CASCADE)
 
     def __str__(self):
         return self.body

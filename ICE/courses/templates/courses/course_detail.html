@@ -21,8 +21,8 @@
 
 
   <a href = "{%url 'add_component_url' module.id %} ">Add Component</a>
-
-    <div id = "box{{module.position}}"></div>
+  <br>
+  <a href = "{% url 'add_quiz_url' module.id %}">Add quiz</a>
 {% endfor %}
 
 

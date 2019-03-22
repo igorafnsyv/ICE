@@ -28,7 +28,7 @@ class Module(models.Model):
     #components
     position = models.IntegerField(db_index = True)
     #quiz bank
-    #quiz
+    #instructor
 
     def __str__(self):
         return '{}'.format(self.title)
@@ -43,6 +43,7 @@ class Component(models.Model):
     date_created = models.DateTimeField(auto_now_add = True) #needs to keep constant somehow
     date_update = models.DateTimeField(auto_now_add = True)
     #position
+    #instructor
 
     def __str__(self):
         return '{}'.format(self.title) #limit it to several symbols?
