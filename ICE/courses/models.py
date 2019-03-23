@@ -2,6 +2,16 @@ from django.db import models
 from django.shortcuts import reverse
 # Create your models here.
 
+class Learner (models.Model):
+    name = models.CharField(max_length = 50, db_index = True)
+    email = models.EmailField(max_length = 50)
+    #password
+    courses = models.ManyToManyField('Course', blank = True)
+    completed_modules = models.ManyToManyField('Module', blank = True)
+
+    def __str__(self):
+        return self.name
+
 class Course(models.Model):
     title = models.CharField(max_length = 150, db_index = True)
     description = models.TextField(blank = False)

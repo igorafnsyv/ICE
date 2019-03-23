@@ -82,9 +82,3 @@ class ComponentCreate(View):
             i += 1
         return redirect(course)
 
-
-class QuizAdd(View):
-    def get(self, request, id):
-        module = Module.objects.get(id = id)
-         
-

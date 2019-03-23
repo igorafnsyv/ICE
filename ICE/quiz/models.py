@@ -5,7 +5,8 @@ from courses.models import Course, Module
 class QuizBank(models.Model):
     title = models.CharField(max_length = 50, db_index = True)
     #instuctor
-    required_score = models.IntegerField()
+    required_questions_num = models.IntegerField()
+    pass_rate = models.IntegerField()
     module = models.ForeignKey(Module, on_delete = models.CASCADE, null = True, blank = True)
     #questions
     def __str__(self):

@@ -1,0 +1,19 @@
+<h3>Please, answer the following questions</h3>
+
+<form action = "{% url 'take_quiz_url' quiz_bank.id %}" method = "POST">
+    {% csrf_token %}    
+    {% for question in questions %}
+        <strong>{{question}}</strong>
+        <br>
+        {{question.asnwer_options}} 
+        {% for answer_option in question.answer_options %}
+            <br>
+            <input type = 'radio' name = "{{question}}" value ="{{answer_option.id}}"> {{answer_option}}
+            
+        {% endfor %}
+        <br>
+        <br>
+    {% endfor %}
+
+    <button type = "Submit">Submit</button>
+</form>
