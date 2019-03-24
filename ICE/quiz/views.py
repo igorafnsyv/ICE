@@ -41,7 +41,7 @@ class QuizTake(View):
     def get(self, request, quiz_bank_id):
         quiz_bank = QuizBank.objects.get(id = quiz_bank_id)
         print(quiz_bank)
-        questions = list(Question.objects.filter(quizBank = quiz_bank))#[:quiz_bank.required_questions_num] #to limit the number of questions returned
+        questions = list(Question.objects.filter(quizBank = quiz_bank))
         shuffle(questions)
         questions [:quiz_bank.required_questions_num]
         for question in questions:
@@ -52,27 +52,19 @@ class QuizTake(View):
         return render (request, 'quiz/take_quiz.html', context = {'quiz_bank' : quiz_bank, 'questions' : questions})
 
     def post(self, request, quiz_bank_id):
-        print()
-        print()
-        print(request.POST)
-        print()
-        #print(request.POST['Who Killed Kennedy?'])
+
         quiz_bank = QuizBank.objects.get(id = quiz_bank_id)
         pass_rate = quiz_bank.pass_rate
         result = 0
 
-        print("Anwer options:")
+    
         for question, answer in request.POST.items():
             if answer.isdigit():
                 answer_result = AnswerOptions.objects.get(id = answer)
                 if answer_result.correct_incorrect:
                     result += 1
 
-            #print(answer[0])
-            #answer_result = AnswerOptions.objects.get(id = answer)
-            #print(answer_result)
-        print(pass_rate / 100)
-        print(result / quiz_bank.required_questions_num)
+
         if result / quiz_bank.required_questions_num >= pass_rate / 100:
                 learner = Learner.objects.get(id = 2)   #change later
                 learner.completed_modules.add(quiz_bank.module)

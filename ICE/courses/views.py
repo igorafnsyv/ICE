@@ -21,7 +21,7 @@ def course_detail(request, slug):   #shows details of the particular course
 
     components = []
     for module in modules:
-        elem = Component.objects.filter(module = module)
+        elem = Component.objects.filter(module = module).order_by('position')
         module.components = elem        #stores each component related to that module in module object
     return render(request, "courses/course_detail.html", context = {"course" : course , "modules" : modules, "components": components})
 
