@@ -15,7 +15,7 @@ def courses_list(request):
 def course_detail(request, slug):   #shows details of the particular course
     course = Course.objects.get(slug__iexact = slug)
     modules = Module.objects.filter(course = course).order_by('position')
-    #component = Component.objects.get(title = "First Component") #check this
+    
 
     #work with quizes!!!!
 
@@ -23,9 +23,12 @@ def course_detail(request, slug):   #shows details of the particular course
     for module in modules:
         elem = Component.objects.filter(module = module).order_by('position')
         module.components = elem        #stores each component related to that module in module object
+        
+        #get quiz
+
+
     return render(request, "courses/course_detail.html", context = {"course" : course , "modules" : modules, "components": components})
 
-#def manage_module(request, slug):
 
 
 class ModuleCreate(View):       #class based view to override Post function
@@ -65,7 +68,7 @@ class ComponentCreate(View):
     def post(self, request, id):
 
         #might result in a case that component is associated with module but not with course
-        module = Module.objects.filter(id__iexact = id) #this
+        module = Module.objects.filter(id__iexact = id) 
         course = module[0].course
         i = 0
         print()
