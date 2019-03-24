@@ -52,6 +52,7 @@ class Component(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, null = True, blank = True)
     date_created = models.DateTimeField(auto_now_add = True) #needs to keep constant somehow
     date_update = models.DateTimeField(auto_now_add = True)
+    position = models.IntegerField(null = True, blank = True)
     #position
     #instructor
 

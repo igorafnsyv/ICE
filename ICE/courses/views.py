@@ -77,6 +77,12 @@ class ComponentCreate(View):
             if request.POST.getlist('module')[i]:
                 module = Module.objects.get(id__iexact = request.POST.getlist('module')[i])
                 component.module = module
+                current_position = 0
+                previous_components = Component.objects.filter(module = module).order_by('-position')
+                if len(previous_components) > 0:
+                    current_position = previous_components[0].position + 1
+
+                component.position = current_position
                 component.save()
                 course = component.module.course
             i += 1
