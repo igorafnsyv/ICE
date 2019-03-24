@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'courses.apps.CoursesConfig',
     'quiz.apps.QuizConfig',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

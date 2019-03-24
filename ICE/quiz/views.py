@@ -48,7 +48,7 @@ class QuizTake(View):
             answer_options =AnswerOptions.objects.filter(question = question)
             question.answer_options = answer_options
         #also pass user ID
-        print(questions[0].answer_options)
+        
         return render (request, 'quiz/take_quiz.html', context = {'quiz_bank' : quiz_bank, 'questions' : questions})
 
     def post(self, request, quiz_bank_id):
