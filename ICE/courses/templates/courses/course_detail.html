@@ -1,3 +1,8 @@
+
+<!--To whom it may concern, this weird notation is the syntax of Django template
+It is same as templates we used for Node.js
+-->
+
 <h1>{{course.title}}</h1>
 {#{course.id}#}
 
@@ -22,7 +27,11 @@
 
   <a href = "{%url 'add_component_url' module.id %} ">Add Component</a>
   <br>
-  <a href = "{% url 'add_quiz_url' module.id %}">Add quiz</a>
+  {%if module %}
+    <i>{{module.quiz_bank.0}}</i>
+  {% else %}
+    <a href = "{% url 'add_quiz_url' module.id %}">Add quiz</a>
+  {% endif %}
 {% endfor %}
 
 

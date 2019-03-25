@@ -6,7 +6,7 @@ class Learner (models.Model):
     name = models.CharField(max_length = 50, db_index = True)
     email = models.EmailField(max_length = 50)
     #password
-    #satff_id
+    staff_id = models.IntegerField()
     courses = models.ManyToManyField('Course', blank = True)
     completed_modules = models.ManyToManyField('Module', blank = True)
 
@@ -46,19 +46,22 @@ class Course(models.Model):
 
 
 class Module(models.Model):
+
     title = models.CharField(max_length = 150, db_index = True)
     slug = models.SlugField(max_length= 50, db_index= True) 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     position = models.IntegerField(db_index = True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
-    #quiz bank
 
+    def get_absolute_url(self):
+        return reverse('module_details_url', kwargs = {'id' : self.id})
 
     def __str__(self):
         return '{}'.format(self.title)
 
 
 class Component(models.Model):
+    
     title = models.CharField(max_length = 50, db_index = True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
     body = models.TextField(blank = True) #either Text component or image component

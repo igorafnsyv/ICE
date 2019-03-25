@@ -1,0 +1,11 @@
+<h1>{{course.title}}</h1>
+
+{% for module in modules%}
+
+    <h3>{{module.title}}</h3>
+    <br>
+    {% if module.available %}
+        <a href = "{{ module.get_absolute_url}}">View Module</a>
+    {%endif%}
+
+{%endfor%}

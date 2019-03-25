@@ -1,0 +1,7 @@
+<h1>Welcome!</h1>
+
+{% for course in courses%}
+    <h3> {{course.title}} </h3>
+    <p>{{course.description}}</p>
+    <a href = "http://localhost:8000/courses/study_course/{{course.id}}">View Details</a> <!-- Replace it later-->
+{%endfor%}
