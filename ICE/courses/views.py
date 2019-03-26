@@ -69,10 +69,6 @@ class ModuleCreate(View):       #class based view to override Post function
         return render (request, 'courses/module_create.html', context = {'form' : form, 'course' : course, 'comp_form' :component_form, 'components': components, 'quiz_banks' : quiz_banks})
 
     def post(self, request, id):
-        print()
-        print()
-        print()
-        print(request.POST)
         course = Course.objects.get(id__iexact = id)
         bound_module = ModuleForm(request.POST)
         instructor = Instructor.objects.get(name__iexact = "Dutch van der Linde")       #proper identification later
@@ -111,21 +107,16 @@ class ComponentCreate(View):
     def post(self, request, id):
 
         #might result in a case that component is associated with module but not with course
-        module = Module.objects.filter(id__iexact = id) 
-        course = module[0].course
-        i = 0
-        for componentID in request.POST.getlist('componentID'):
-            component = Component.objects.get(id__iexact = componentID)
-            if request.POST.getlist('module')[i]:
-                module = Module.objects.get(id__iexact = request.POST.getlist('module')[i])
+        module = Module.objects.get(id__iexact = id) 
+        course = module.course
+        for key, componentID in request.POST.items():
+            if "component" in key:
+                component = Component.objects.get(id__iexact = componentID)
                 component.module = module
-                current_position = 0
+                current_position = 1
                 previous_components = Component.objects.filter(module = module).order_by('-position')
-                if len(previous_components) > 0:
+                if len(previous_components) > 1:
                     current_position = previous_components[0].position + 1
-
                 component.position = current_position
                 component.save()
-                course = component.module.course
-            i += 1
         return redirect(course)

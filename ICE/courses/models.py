@@ -67,10 +67,10 @@ class Component(models.Model):
     image = models.ImageField(upload_to = 'images/', blank = True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null = True, blank = True)
     module = models.ForeignKey(Module, on_delete=models.CASCADE, null = True, blank = True)
-    date_created = models.DateTimeField(auto_now_add = True) #needs to keep constant somehow
-    date_update = models.DateTimeField(auto_now_add = True)
+    date_created = models.DateTimeField(auto_now_add = True) #constant
+    date_updated = models.DateTimeField(auto_now_add = True)
     position = models.IntegerField(null = True, blank = True)
 
     def __str__(self):
-        return '{}'.format(self.title) #limit it to several symbols?
+        return '{}'.format(self.title) 
 
