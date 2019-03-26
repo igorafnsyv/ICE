@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Course, Module, Component, Learner
+from .models import Course, Module, Component, Learner, Instructor
 from quiz.models import QuizBank
 from django.http import HttpResponse
 
@@ -38,7 +38,8 @@ def study_module(request, id):
     module = Module.objects.get(id__iexact = id)
     components = Component.objects.filter(module = module).order_by('position')
     quiz_bank = QuizBank.objects.get(module = module)
-    return render (request, 'courses/study_module.html', context = {'module' : module, 'components' : components, 'quiz_bank' : quiz_bank})
+    quiz_taken = module in Learner.objects.get(staff_id = 1).completed_modules.all()    #change to proper staff id. Checks whether Learner completed this module
+    return render (request, 'courses/study_module.html', context = {'module' : module, 'components' : components, 'quiz_bank' : quiz_bank, 'quiz_taken' : quiz_taken})
 
 
 def course_detail(request, slug):   #shows details of the particular course
@@ -69,11 +70,11 @@ class ModuleCreate(View):       #class based view to override Post function
     def post(self, request, id):
         course = Course.objects.get(title__iexact = id)
         bound_module = ModuleForm(request.POST)
-
-  
+        instructor = Instructor.objects.get(name__iexact = "Dutch van der Linde")       #proper identification later
         if bound_module.is_valid():
             obj = bound_module.save(commit = False)
             obj.course = course
+            obj.instructor = instructor
             if 'position' not in request.POST:  #if Position is not specified by tutor
                 position = Module.objects.filter(course = course).count() #get total number of positions
                 obj.position = position + 1 #position = append to the ends
@@ -110,7 +111,3 @@ class ComponentCreate(View):
                 course = component.module.course
             i += 1
         return redirect(course)
-
-
-
-

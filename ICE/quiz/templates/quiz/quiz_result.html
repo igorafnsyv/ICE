@@ -1,0 +1,16 @@
+{% if result%}
+    <h1>You have passed the quiz. Your result is {{result }}%. Next module is unlocked</h1>
+{%  endif   %}
+
+{% if fail%}
+
+    <h1>Please, try again</h1>
+
+{% endif %}
+
+<script>
+window.setTimeout(function(){
+window.location.href =  "{% url 'study_course_url' course.id %}";
+}, 5000);
+
+</script>

@@ -10,8 +10,6 @@ It is same as templates we used for Node.js
     <h3>{{module.title}}</h3>
 
 
-
-
     {% for component in module.components%}
       <h4>  {{component}} </h4>
       {% if component.image %}
@@ -25,13 +23,13 @@ It is same as templates we used for Node.js
 
 
 
-  <a href = "{%url 'add_component_url' module.id %} ">Add Component</a>
-  <br>
-  {%if module %}
-    <i>{{module.quiz_bank.0}}</i>
-  {% else %}
-    <a href = "{% url 'add_quiz_url' module.id %}">Add quiz</a>
-  {% endif %}
+    <a href = "{%url 'add_component_url' module.id %} ">Add Component</a>
+    <br>
+    {%if module.quiz_bank %}
+        <i>{{module.quiz_bank.0}}</i>
+    {% else %}
+        <a href = "{% url 'add_quiz_url' module.id %}">Add quiz</a>
+    {% endif %}
 {% endfor %}
 
 

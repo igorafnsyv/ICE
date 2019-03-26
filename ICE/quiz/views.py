@@ -66,9 +66,11 @@ class QuizTake(View):
 
 
         if result / quiz_bank.required_questions_num >= pass_rate / 100:
-                learner = Learner.objects.get(id = 2)   #change later
+                learner = Learner.objects.get(staff_id = 1)   #change later
                 learner.completed_modules.add(quiz_bank.module)
                 learner.save()
-                return HttpResponse('<h1>You passed. New module is unlocked. Your result is ' + str(result / quiz_bank.required_questions_num * 100) + '%</h1>')
+                result_percent = result / quiz_bank.required_questions_num * 100
+                return render(request, "quiz/quiz_result.html", context = {"result" : result_percent, 'course' : quiz_bank.course})
                 
-        return HttpResponse('<h1>Failed! Never gonna give you up</h1>')
+        fail = True        
+        return render(request, "quiz/quiz_result.html", context = {"fail" : fail, 'course' : quiz_bank.course})

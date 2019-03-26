@@ -11,6 +11,9 @@
         {%endif%}
         <br>
 {%endfor%}
-<a href = "{% url 'take_quiz_url' quiz_bank.id %}">Take Quiz</a> <!--Send also USER ID here!-->
-
+{% if quiz_taken %}
+        <i>You have completed the "{{quiz_bank.title}}"</i>
+{% else %}
+        <a href = "{% url 'take_quiz_url' quiz_bank.id %}">Take Quiz</a> <!--Send also USER ID here!-->
+{%endif%}
 

@@ -8,7 +8,7 @@ urlpatterns = [
     path('create_module/<str:id>', views.ModuleCreate.as_view(), name = "create_module_url"),
     path('create_component/<str:id>', views.ComponentCreate.as_view(), name = "add_component_url"),
     path('course_list/', views.learner_course_list),
-    path('study_course/<str:id>/', views.study_course),
+    path('study_course/<str:id>/', views.study_course, name = "study_course_url"),
     path('study_module/<str:id>/', views.study_module , name = "module_details_url"),
 
 ]
