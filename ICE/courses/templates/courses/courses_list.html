@@ -1,9 +1,24 @@
-<h1>List of course created by you</h1>
-<h2>Hey {{courses.0.instructor}}! </h2>
 
+<head>
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{%static 'courses/style.css'%}">
+<title> Home </title>
+<div id = "header">
+<h2>  Hello <span>{{courses.0.instructor}}!<span></h2>
+</div>
+</head>
+
+<body>
+<h1>List of course created by you</h1>
 {% for course in courses %}
-    <h3>{{course.title}}</h3>
-   
-    <p>{{course.description}}</p>
-    <a href = "{{ course.get_absolute_url }}">View Details</a>
+<table>
+   <tr>
+   <h3>{{course.title}}</h3> 
+   </tr>
+   <tr>
+ 	<td>  <p>{{course.description}} </p> </td>
+    <td> <a href = "{{ course.get_absolute_url }}"> View Details > </a> </td>
+   </tr> 
+ </table>
 {% endfor %}
+</body>

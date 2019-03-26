@@ -1,3 +1,5 @@
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{%static 'courses/style.css'%}">
 {{courseID}}
 <br>
 <form action ="{% url 'create_module_url' courseID %}" method = "post">
