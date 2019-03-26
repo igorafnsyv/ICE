@@ -46,10 +46,4 @@ git pull origin master
    
    
    
-   text-align: center;
-	outline-color: white;
-	background-color:rgb(204,230,255);
-	border: 11px double rgba(82,137,199,0.31);
-  border-radius: 20px;
-  color:white;
-  font-family: Century Gothic;
+  
