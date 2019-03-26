@@ -32,7 +32,8 @@ git pull origin master
 		a1. if it shows some error, try creating new branch by doing this
 		
 			git branch test 
-	b. git add -A		
+	b. git add -A
+	
 	c. git commit -m "Insert you message here. Form of message: [Verb] [Changes Made]"
 	
 	d. git push -u origin test
