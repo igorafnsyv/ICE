@@ -32,10 +32,10 @@ git pull origin master
 		a1. if it shows some error, try creating new branch by doing this
 		
 			git branch test 
-			
-	b. git commit -m "Insert you message here. Form of message: [Verb] [Changes Made]"
+	b. git add -A		
+	c. git commit -m "Insert you message here. Form of message: [Verb] [Changes Made]"
 	
-	c. git push -u origin test
+	d. git push -u origin test
 
 3. Check GitHub. Changes will not appear on Master Branch yet. 
    You need to create a Pull Request. Can be done on GitHub
