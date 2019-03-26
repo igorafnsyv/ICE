@@ -1,9 +1,25 @@
+<head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'courses/style.css'%}">
-<h1>Welcome!</h1>
+<title> Home </title>
+<div id = "header">
+<h2>  Welcome to <span> I.C.E. </span></h2>
+</div>
+</head>
 
+<body>
+<h1> My Courses </h1>	
 {% for course in courses%}
+<table>
+	<tr>
     <h3> {{course.title}} </h3>
-    <p>{{course.description}}</p>
-    <a href = "http://localhost:8000/courses/study_course/{{course.id}}">View Details</a> <!-- Replace it later-->
+	</tr>
+	<tr>
+    <td> <p>{{course.description}}</p></td>
+    <td> <a href = "http://localhost:8000/courses/study_course/{{course.id}}">View Details</a> <!-- Replace it later--> </td>
+</tr>
+
+ </table>
 {%endfor%}
+</body>
+

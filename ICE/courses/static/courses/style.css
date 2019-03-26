@@ -1,5 +1,6 @@
 button {
-	margin-left: 5px;
+	margin-left: ;
+
 }
 body {
 	font-family: "helvetica";
@@ -50,6 +51,17 @@ p {
 	background-color: #262626;
 }
 
+#moduletitle {
+	text-align: center;
+	outline-color: white; 
+	background-color: lightgray;
+	border: 11px 
+	double lightgray; 
+	border-radius: 20px; 
+	color: white;
+	letter-spacing: 1px;
+}
+
 table {
 	border-collapse: collapse;
 	width: 100%;
@@ -58,7 +70,7 @@ table {
 th, td {
   padding: 8px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+ border-bottom: 1px solid #ddd;
 }
 
 a {
@@ -70,6 +82,10 @@ i {
 }
 
 img {
+	margin-left: 10px;
+}
+
+form {
 	margin-left: 10px;
 }
 

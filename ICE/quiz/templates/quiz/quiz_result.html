@@ -1,3 +1,14 @@
+<head>
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{%static 'courses/style.css'%}">
+<title> Quiz Result </title>
+<div id = "header">
+<h2>  Welcome to <span> I.C.E. </span></h2>
+</div>
+</head>
+
+
+<body>
 {% if result%}
     <h1>You have passed the quiz. Your result is {{result }}%. Next module is unlocked</h1>
 {%  endif   %}
@@ -14,3 +25,4 @@ window.location.href =  "{% url 'study_course_url' course.id %}";
 }, 5000);
 
 </script>
+</body>
