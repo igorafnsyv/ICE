@@ -14,6 +14,9 @@ generate diagram - https://simpleit.rocks/python/django/generate-uml-class-diagr
 Installation is done thorugh PIP or PIP3 package manager
 
 
+
+Make sure you have initialized git repository on your computer. It is initialized in the same folder where you can find README file, ICE folder and other stuff. Make sure you initialized it in the correct directory. If you clone the repository from GitHub, .git hidden repository should be already there. 
+
 Working with git:
 
 1. When you start working, update your project directory to the most recent version of our master branch by calling this command:
