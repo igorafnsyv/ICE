@@ -12,3 +12,5 @@ Before working with the project, make sure you have installed all the necessary 
 generate diagram - https://simpleit.rocks/python/django/generate-uml-class-diagrams-from-django-models/
 
 Installation is done thorugh PIP or PIP3 package manager
+
+Test of branching
