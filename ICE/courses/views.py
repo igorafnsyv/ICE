@@ -42,8 +42,8 @@ def study_module(request, id):
     return render (request, 'courses/study_module.html', context = {'module' : module, 'components' : components, 'quiz_bank' : quiz_bank, 'quiz_taken' : quiz_taken})
 
 
-def course_detail(request, slug):   #shows details of the particular course
-    course = Course.objects.get(slug__iexact = slug)
+def course_detail(request, id):   #shows details of the particular course
+    course = Course.objects.get(id__iexact = id)
     modules = Module.objects.filter(course = course).order_by('position')
     components = []
     for module in modules:
@@ -61,24 +61,42 @@ class ModuleCreate(View):       #class based view to override Post function
    #need to identify instructor who created module
    
     def get (self, request, id):
-        courseID = Course.objects.get(id = id)
+        course = Course.objects.get(id = id)
         form = ModuleForm()
         component_form = ComponentForm()
-        components = Component.objects.filter(module = None)
-        return render (request, 'courses/module_create.html', context = {'form' : form, 'courseID' : courseID, 'comp_form' :component_form, 'components': components})
+        components = Component.objects.filter(course = course, module = None)
+        quiz_banks = QuizBank.objects.filter(course = course, module = None)
+        return render (request, 'courses/module_create.html', context = {'form' : form, 'course' : course, 'comp_form' :component_form, 'components': components, 'quiz_banks' : quiz_banks})
 
     def post(self, request, id):
-        course = Course.objects.get(title__iexact = id)
+        print()
+        print()
+        print()
+        print(request.POST)
+        course = Course.objects.get(id__iexact = id)
         bound_module = ModuleForm(request.POST)
         instructor = Instructor.objects.get(name__iexact = "Dutch van der Linde")       #proper identification later
         if bound_module.is_valid():
             obj = bound_module.save(commit = False)
             obj.course = course
-            obj.instructor = instructor
+            obj.instructor = instructor                    
             if 'position' not in request.POST:  #if Position is not specified by tutor
                 position = Module.objects.filter(course = course).count() #get total number of positions
                 obj.position = position + 1 #position = append to the ends
             obj.save()
+            new_module = Module.objects.get(id = obj.id)
+            component_position = 1
+            for key, value in request.POST.items():
+                if "component" in key:
+                    component = Component.objects.get(id__iexact = value)
+                    component.module = new_module
+                    component.position = component_position
+                    component_position += 1
+                    component.save()
+                if 'quiz' in key:
+                    quiz_bank = QuizBank.objects.get(id__iexact = value)
+                    quiz_bank.module = new_module
+                    quiz_bank.save()
             return redirect(course)
               
 

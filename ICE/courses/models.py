@@ -39,7 +39,7 @@ class Course(models.Model):
     category = models.CharField(max_length = 150, db_index = True)
 
     def get_absolute_url(self):
-        return reverse('course_detail_url', kwargs = {'slug' : self.slug})
+        return reverse('course_detail_url', kwargs = {'id' : self.id})
 
     def __str__(self):
         return '{}'.format(self.title)
@@ -48,7 +48,6 @@ class Course(models.Model):
 class Module(models.Model):
 
     title = models.CharField(max_length = 150, db_index = True)
-    slug = models.SlugField(max_length= 50, db_index= True) 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null = True, blank = True)
     position = models.IntegerField(db_index = True, null = True, blank = True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)

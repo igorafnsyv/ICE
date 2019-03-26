@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 class ModuleForm(forms.ModelForm):
     class Meta:
         model = Module
-        fields = ['title', 'slug']
+        fields = ['title']
 
 
 
