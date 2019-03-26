@@ -14,3 +14,5 @@ generate diagram - https://simpleit.rocks/python/django/generate-uml-class-diagr
 Installation is done thorugh PIP or PIP3 package manager
 
 Test of branching
+
+Proper test of branching
