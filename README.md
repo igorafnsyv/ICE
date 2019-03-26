@@ -43,3 +43,13 @@ git pull origin master
 
 4. Just follow the Pull Request instructions. BUT NEVER. NEVER PRESS MERGE.
    I will review your code myself and approve changes
+   
+   
+   
+   text-align: center;
+	outline-color: white;
+	background-color:rgb(204,230,255);
+	border: 11px double rgba(82,137,199,0.31);
+  border-radius: 20px;
+  color:white;
+  font-family: Century Gothic;
