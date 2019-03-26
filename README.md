@@ -23,10 +23,15 @@ Note: origin is the name of remote repository
 git pull origin master
 
 2. To make your changes available on GitHub:
+
 	a. git checkout test
+	
 		a1. if it shows some error, try creating new branch by doing this
+		
 			git branch test 
+			
 	b. git commit -m "Insert you message here. Form of message: [Verb] [Changes Made]"
+	
 	c. git push -u origin test
 
 3. Check GitHub. Changes will not appear on Master Branch yet. 
