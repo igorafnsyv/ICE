@@ -1,4 +1,11 @@
-
+<head>
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{%static 'courses/style.css'%}">
+<title> Course Detail </title>
+<div id = "header">
+<h2> Course Detail </h2>
+</div>
+</head>
 <!--To whom it may concern, this weird notation is the syntax of Django template
 It is same as templates we used for Node.js
 -->
@@ -7,11 +14,11 @@ It is same as templates we used for Node.js
 {#{course.id}#}
 
 {% for module in modules%}
-    <h3>{{module.title}}</h3>
+    <h3> Module {{module.position}}: {{module.title}}</h3>
 
 
     {% for component in module.components%}
-      <h4>  {{component}} </h4>
+        <h4> Lesson {{component.position}} : {{component}}  </h4>
       {% if component.image %}
         <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
       {%endif%}
@@ -21,9 +28,8 @@ It is same as templates we used for Node.js
       <br>
     {%endfor%}
 
-
-
-    <a href = "{%url 'add_component_url' module.id %} ">Add Component</a>
+  <!--  <a href = "{%url 'add_component_url' module.id %} ">Add Component</a> -->
+    <a href="{%url 'add_component_url' module.id %}"><button>Add Component</button></a>
     <br>
     {%if module.quiz_bank %}
         <i>{{module.quiz_bank.0}}</i>
