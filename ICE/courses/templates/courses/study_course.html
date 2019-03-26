@@ -1,13 +1,22 @@
+<head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'courses/style.css'%}">
+<title> {{course.title}} </title>
+<div id = "header">
+<h2>  Course detail </h2>
+</div>
+</head>
+
 <h1>{{course.title}}</h1>
 
 {% for module in modules%}
-
-    <h3>{{module.title}}</h3>
-    <br>
+	<table>
+	<td>
+    <h3>Module {{module.position}}: {{module.title}}</h3>
+    </td>
     {% if module.available %}
-        <a href = "{{ module.get_absolute_url}}">View Module</a>
+     <td> <a href = "{{ module.get_absolute_url}}">View Module</a></td>
     {%endif%}
+</table>
 
 {%endfor%}

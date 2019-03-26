@@ -1,10 +1,17 @@
+<head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'courses/style.css'%}">
+<title> Home </title>
+<div id = "header">
+<h2>  Welcome to <span> I.C.E. <span></h2>
+</div>
+</head>
+
 <h1>{{module.title}}</h1>
 
 
 {% for component in components%}
-        <h4>  {{component}} </h4>
+        <h4> Lesson {{component.position}}: {{component}} </h4>
         {% if component.image %}
                 <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
         {%endif%}
@@ -16,6 +23,6 @@
 {% if quiz_taken %}
         <i>You have completed the "{{quiz_bank.title}}"</i>
 {% else %}
-        <a href = "{% url 'take_quiz_url' quiz_bank.id %}">Take Quiz</a> <!--Send also USER ID here!-->
+        <a href = "{% url 'take_quiz_url' quiz_bank.id %}"><button>Take Quiz</button></a> <!--Send also USER ID here!-->
 {%endif%}
 

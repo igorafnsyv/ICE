@@ -1,3 +1,13 @@
+<head>
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{%static 'courses/style.css'%}">
+<title> Add quiz </title>
+<div id = "header">
+<h2>  Welcome to <span> I.C.E. </span></h2>
+</div>
+</head>
+
+<body>
 <h3>{{module.title}}</h3>
 
 <form action = "{% url 'add_quiz_url' module.id %}" method = "POST">
@@ -20,3 +30,4 @@
     <br>
     <button type = "submit">Submit</button>
 </form>
+</body>
