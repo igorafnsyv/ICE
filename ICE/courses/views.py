@@ -62,6 +62,7 @@ class ModuleCreate(View):       #class based view to override Post function
    
     def get (self, request, id):
         course = Course.objects.get(id = id)
+
         form = ModuleForm()
         component_form = ComponentForm()
         components = Component.objects.filter(course = course, module = None)
@@ -101,8 +102,9 @@ class ComponentCreate(View):
     #need to identify instructor who created component
     def get(self, request, id):
         component_form = ComponentForm()
-        components = Component.objects.filter(module = None)    #Should it be then either same Course or no Course?
         module = Module.objects.get(id = id)
+        course = module.course
+        components = Component.objects.filter(course = course, module = None)    #Should it be then either same Course or no Course?
         return render(request, 'courses/add_existing_component.html', context = {'form' : component_form, 'module' : module, 'components' : components})
     def post(self, request, id):
 
