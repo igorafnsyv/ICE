@@ -7,6 +7,9 @@ Use pull requests. I will check your code and approve it.
 
 ADD CSS TO STATIC FOLDER. READ DOCUMENTATION HERE: https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+
+Clear static after you change CSS
+
 Before working with the project, make sure you have installed all the necessary components. Some of them can be found here:
 
 generate diagram - https://simpleit.rocks/python/django/generate-uml-class-diagrams-from-django-models/
@@ -43,3 +46,9 @@ git pull origin master
 
 4. Just follow the Pull Request instructions. BUT NEVER. NEVER PRESS MERGE.
    I will review your code myself and approve changes
+   
+   
+
+TESTING TESING - HANAH
+   
+  
