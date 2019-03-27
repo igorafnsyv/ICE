@@ -26,10 +26,7 @@ class Instructor (models.Model):
 class Course(models.Model):
     title = models.CharField(max_length = 150, db_index = True)
     description = models.TextField(blank = False)
-    slug = models.SlugField(max_length=150, unique = True) #later actually can change
-    
     instructor = models.CharField(max_length = 40, db_index = True) 
-
     #instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
 
     #current_Learners -> learners who are taking course now
