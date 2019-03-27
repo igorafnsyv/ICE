@@ -26,10 +26,7 @@ class Instructor (models.Model):
 class Course(models.Model):
     title = models.CharField(max_length = 150, db_index = True)
     description = models.TextField(blank = False)
-    slug = models.SlugField(max_length=150, unique = True) #later actually can change
-    
     instructor = models.CharField(max_length = 40, db_index = True) 
-
     #instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
 
     #current_Learners -> learners who are taking course now
@@ -39,7 +36,7 @@ class Course(models.Model):
     category = models.CharField(max_length = 150, db_index = True)
 
     def get_absolute_url(self):
-        return reverse('course_detail_url', kwargs = {'slug' : self.slug})
+        return reverse('course_detail_url', kwargs = {'id' : self.id})
 
     def __str__(self):
         return '{}'.format(self.title)
@@ -48,7 +45,6 @@ class Course(models.Model):
 class Module(models.Model):
 
     title = models.CharField(max_length = 150, db_index = True)
-    slug = models.SlugField(max_length= 50, db_index= True) 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null = True, blank = True)
     position = models.IntegerField(db_index = True, null = True, blank = True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
@@ -68,10 +64,10 @@ class Component(models.Model):
     image = models.ImageField(upload_to = 'images/', blank = True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null = True, blank = True)
     module = models.ForeignKey(Module, on_delete=models.CASCADE, null = True, blank = True)
-    date_created = models.DateTimeField(auto_now_add = True) #needs to keep constant somehow
-    date_update = models.DateTimeField(auto_now_add = True)
+    date_created = models.DateTimeField(auto_now_add = True) #constant
+    date_updated = models.DateTimeField(auto_now_add = True)
     position = models.IntegerField(null = True, blank = True)
 
     def __str__(self):
-        return '{}'.format(self.title) #limit it to several symbols?
+        return '{}'.format(self.title) 
 

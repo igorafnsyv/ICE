@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path('list/', views.courses_list),
-    path('course/<str:slug>', views.course_detail, name = "course_detail_url"),
+    path('course/<str:id>', views.course_detail, name = "course_detail_url"),
     path('create_module/<str:id>', views.ModuleCreate.as_view(), name = "create_module_url"),
     path('create_component/<str:id>', views.ComponentCreate.as_view(), name = "add_component_url"),
     path('course_list/', views.learner_course_list),
