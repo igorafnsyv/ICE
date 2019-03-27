@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
 <title> {{course.title}} </title>
 <div id = "header">
-<h2> Course Detail </h2>
+<h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
 
@@ -14,15 +14,15 @@
   {% for module in modules%}
     <div id="moduletitle"> <h3> Module {{module.position}}: {{module.title}}</h3> </div>
 
-
+<br>
+<br>
+<br>
     {% for component in module.components%}
-    
-        <h4> Lesson {{component.position}} : {{component}}  </h4>
       {% if component.image %}
         <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
       {%endif%}
       {% if component.body %} <td>
-        <p>{{ component.body }}</p>
+        <div id="componentbody"><p>{{ component.body }}</p></div>
       {%endif%}
     {%endfor%}
   <!--  <a href = "{%url 'add_component_url' module.id %} ">Add Component</a> -->
@@ -33,7 +33,7 @@
     <br>
     <br>
     {%if module.quiz_bank %}
-        <i> <span>Quiz: </span>{{module.quiz_bank.0}}</i>
+        <div id="quiz"><i> <span>Quiz: </span>{{module.quiz_bank.0}}</i></div>
         <br>
         <br>
         <br>

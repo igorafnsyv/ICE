@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
 <title> Home </title>
 <div id = "header">
+<!--<h2 id="hello">  Hello <span>{{courses.0.instructor}}!&emsp;&emsp;<span></h2>-->
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
@@ -15,8 +16,8 @@
     <h3> {{course.title}} </h3>
 	</tr>
 	<tr>
-    <td> <p>{{course.description}}</p></td>
-    <td> <a href = "{% url 'study_course_url' course.id %}">View Details</a> <!-- Replace it later--> </td>
+    <td id="td1"> <p>{{course.description}}</p></td>
+    <td id="td2"> <a href = "{% url 'study_course_url' course.id %}">View Details ></a> <!-- Replace it later--> </td>
 </tr>
 
  </table>

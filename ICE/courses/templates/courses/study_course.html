@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
 <title> {{course.title}} </title>
 <div id = "header">
-<h2>  Course detail </h2>
+<h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
 
@@ -11,12 +11,11 @@
 
 {% for module in modules%}
 	<table>
-	<td>
-    <h3>Module {{module.position}}: {{module.title}}</h3>
+	<td id="td1">
+    <h3>Module {{module.position}}: <span id="light">{{module.title}}</span></h3>
     </td>
     {% if module.available %}
-     <td> <a href = "{{ module.get_absolute_url}}">View Module</a></td>
+     <td id="td2"> <a href = "{{ module.get_absolute_url}}">View Module ></a></td>
     {%endif%}
 </table>
-
 {%endfor%}

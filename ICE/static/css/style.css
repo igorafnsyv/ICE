@@ -1,5 +1,14 @@
 button {
-	margin-left: 10px;
+	background-color: #404040;
+	padding-top: 7px;
+	padding-bottom:7px;
+	padding-right:20px;
+	padding-left: 20px;
+	color:white;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+
 }
 body {
 	font-family: "helvetica";
@@ -8,7 +17,7 @@ body {
 
 span {
 	font-weight: bold;
-	font-style: italic;
+
 }
 
 h1 {
@@ -21,9 +30,8 @@ h1 {
 }
 
 h2{
-	/*text-align: right;
-	padding-right: 5px; */
-	padding-left: 5px;
+
+	padding-left: 10px;
 	font-weight: lighter;
 	color: white;
 	font-size: 20px;
@@ -44,10 +52,41 @@ p {
 	color: #808080;
 }
 
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+a {
+ color: black;
+}
+
+i {
+	text-align: center;
+}
+
+img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 40%;
+}
+
+form {
+	margin-left: 10px;
+}
+
 #header {
 	padding-top: 1px;
-	padding-bottom: 0px;
+	padding-bottom: 1px;
 	background-color: #262626;
+	width: 100%;
 }
 
 #moduletitle {
@@ -61,30 +100,35 @@ p {
 	letter-spacing: 1px;
 }
 
-table {
-	border-collapse: collapse;
-	width: 100%;
+#componentbody{
+	text-align: center;
+	margin-left: 70px;
+	margin-right: 70px;
 }
 
-th, td {
-  padding: 8px;
-  text-align: left;
- border-bottom: 1px solid #ddd;
+#hello{
+	float: right;
+	font-size:15px;
+	padding-top: 9px;
 }
 
-a {
- color: black;
+#td1{
+	width: 80%;
 }
 
-i {
-	padding-left: 10px;
+#td2{
+	width: 20%;
 }
 
-img {
-	margin-left: 10px;
+#quiz{
+	text-align: center;
 }
 
-form {
-	margin-left: 10px;
+#light {
+	font-weight: lighter;
 }
+
+
+
+
 
