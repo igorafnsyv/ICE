@@ -2,6 +2,10 @@ from django.db import models
 from django.shortcuts import reverse
 # Create your models here.
 
+
+#Store Categories? 
+
+
 class Learner (models.Model):
     name = models.CharField(max_length = 50, db_index = True)
     email = models.EmailField(max_length = 50)
@@ -31,8 +35,8 @@ class Course(models.Model):
 
     #current_Learners -> learners who are taking course now
     #completed_Learners learner who has already completed the course
-    credit_units = models.IntegerField(db_index = True)
-    status = models.IntegerField(db_index = True) # value 1 if course is opened, 0 if closed
+    credit_units = models.IntegerField(db_index = True, null = True, blank = True)
+    status = models.IntegerField(db_index = True, null = True, blank = True) # value 1 if course is opened, 0 if closed
     category = models.CharField(max_length = 150, db_index = True)
 
     def get_absolute_url(self):

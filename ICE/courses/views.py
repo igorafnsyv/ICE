@@ -5,12 +5,12 @@ from django.http import HttpResponse
 
 from django.views.generic import View
 
-from .forms import ModuleForm, ComponentForm
+from .forms import ModuleForm, ComponentForm, CourseForm
 # Create your views here.
 
 def courses_list(request):
     #has to return all courses that were created by this paticular Instructor
-    courses = Course.objects.filter(instructor = "Dutch Van Der Linde") #assume this is default tutor now. How to get the name of the logged in tutor?
+    courses = Course.objects.filter(instructor = "Dutch van der Linde") #assume this is default tutor now. How to get the name of the logged in tutor?
     return render(request, "courses/courses_list.html", context = {'courses' : courses})
 
 
@@ -55,6 +55,26 @@ def course_detail(request, id):   #shows details of the particular course
     return render(request, "courses/course_detail.html", context = {"course" : course , "modules" : modules, "components": components})
 
 
+class CourseCreate(View):
+    def get(self, request):
+        form = CourseForm()
+        instructor = "Dutch van der Linde"
+        return render (request, 'courses/course_create.html', context = {'form' : form, 'instructor' : instructor})
+
+    def post (self, request):
+        print()
+        print()
+        print(request.POST)
+        bound_course = CourseForm(request.POST)
+        
+        instructor = request.POST['instructor']
+        if bound_course.is_valid:
+            obj = bound_course.save(commit = False)
+            obj.instructor = instructor
+            obj.save()
+        courses = Course.objects.all()
+        return redirect(courses[len(courses) - 1])
+
 
 class ModuleCreate(View):       #class based view to override Post function
    
@@ -62,7 +82,6 @@ class ModuleCreate(View):       #class based view to override Post function
    
     def get (self, request, id):
         course = Course.objects.get(id = id)
-
         form = ModuleForm()
         component_form = ComponentForm()
         components = Component.objects.filter(course = course, module = None)
