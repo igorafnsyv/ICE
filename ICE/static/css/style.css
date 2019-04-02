@@ -1,3 +1,4 @@
+
 button {
 	background-color: #404040;
 	padding-top: 7px;
@@ -129,6 +130,10 @@ form {
 }
 
 #createcourse {
+	width: 100%;
+}
+
+#banner {
 	width: 100%;
 }
 
