@@ -7,22 +7,31 @@
 </div>
 </head>
 
-<h1>{{module.title}}</h1>
+ <table id='banner'>
+        <tr>
+        <td id='menu1'> <a href = "{{ course_create_url }}"> <p>HOME</p> </a> </td>
+        <td id = 'menu2'> <a href = "{{ course_create_url }}"> <p>COURSES</p> </a> </td>
+        <td id='menu3'> <a href = "{{ course_create_url }}"> <p>RESULTS </p></a> </td>
+        <td id='menu4'> <a href = "{{ course_create_url }}"> <p>ENROLLMENT </p></a> </td>
+        <td id='rest'></td>
+        <br> 
+  </table>
+
+<h1><span>Module {{module.position}}:</span> {{module.title}}</h1>
 
 
 {% for component in components%}
-        <h4> Lesson {{component.position}}: {{component}} </h4>
         {% if component.image %}
                 <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
         {%endif%}
         {% if component.body %}
-                <p>{{ component.body }}</p>
+                 <div id="componentbody"><p>{{ component.body }}</p></div>
         {%endif%}
         <br>
 {%endfor%}
 {% if quiz_taken %}
-        <i>You have completed the "{{quiz_bank.title}}"</i>
+        <div id="quiz"><i>You have completed the "{{quiz_bank.title}}"</i></div>
 {% else %}
-        <a href = "{% url 'take_quiz_url' quiz_bank.id %}"><button>Take Quiz</button></a> <!--Send also USER ID here!-->
+        <div id="quiz"><a href = "{% url 'take_quiz_url' quiz_bank.id %}"><button>Take Quiz</button></a></div> <!--Send also USER ID here!-->
 {%endif%}
 

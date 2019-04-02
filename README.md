@@ -20,7 +20,7 @@ change
 
 Make sure you have initialized git repository on your computer. It is initialized in the same folder where you can find README file, ICE folder and other stuff. Make sure you initialized it in the correct directory. If you clone the repository from GitHub, .git hidden repository should be already there. 
 
-Working with git:
+## Working with git:
 
 1. When you start working, update your project directory to the most recent version of our master branch by calling this command:
 
@@ -47,9 +47,3 @@ git pull origin master
 4. Just follow the Pull Request instructions. BUT NEVER. NEVER PRESS MERGE.
    I will review your code myself and approve changes
    
-   
-
-TESTING
-
-   
-  

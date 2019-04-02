@@ -5,20 +5,22 @@ from django.http import HttpResponse
 
 from django.views.generic import View
 
-from .forms import ModuleForm, ComponentForm
+from .forms import ModuleForm, ComponentForm, CourseForm
 # Create your views here.
 
 def courses_list(request):
-    #has to return all courses that were created by this paticular Instructor
-    courses = Course.objects.filter(instructor = "Dutch Van Der Linde") #assume this is default tutor now. How to get the name of the logged in tutor?
+    # has to return all courses that were created by this particular Instructor
+    courses = Course.objects.filter(instructor = "Dutch van der Linde") # assume this is default tutor now. How to get the name of the logged in tutor?
     return render(request, "courses/courses_list.html", context = {'courses' : courses})
 
 
-def learner_course_list(request):   #mege it later with course_list
-    courses = Learner.objects.filter(staff_id = 1)[0].courses.all()          #later filter to actual staff_id
+def learner_course_list(request):   # mege it later with course_list
+    courses = Learner.objects.filter(staff_id = 1)[0].courses.all()          # later filter to actual staff_id
     return render(request, "courses/learner_course_list.html", context = {'courses' : courses})
 
-def study_course(request, id):      #merge it later with course_detail
+
+
+def study_course(request, id):      # merge it later with course_detail
     course = Course.objects.get(id__iexact = id)
     modules = Module.objects.filter(course = course)
     print(modules)
@@ -55,6 +57,47 @@ def course_detail(request, id):   #shows details of the particular course
     return render(request, "courses/course_detail.html", context = {"course" : course , "modules" : modules, "components": components})
 
 
+class CourseCreate(View):
+    def get(self, request):
+        form = CourseForm()
+        instructor = "Dutch van der Linde"
+        return render (request, 'courses/course_create.html', context = {'form' : form, 'instructor' : instructor})
+
+    def post (self, request):
+        bound_course = CourseForm(request.POST)
+        
+        instructor = request.POST['instructor']
+        if bound_course.is_valid:
+            obj = bound_course.save(commit = False)
+            obj.instructor = instructor
+            obj.save()
+        courses = Course.objects.all()
+        return redirect(courses[len(courses) - 1])
+
+def module_delete(request, id):
+    module = Module.objects.get(id__iexact = id)
+    course = module.course
+    removed_position = module.position
+    all_modules = Module.objects.filter(course=course)
+    for current_module in all_modules:
+        if current_module.position > removed_position:
+            current_module.position -= 1
+            current_module.save()
+    module.delete()
+    return redirect (course)
+
+def component_delete(request, id):
+    component = Component.objects.get(id__iexact=id)
+    module = component.module
+    course = module.course
+    removed_position = component.position
+    all_components = Component.objects.filter(module=module)
+    for current_component in all_components:
+        if current_component.position > removed_position:
+            current_component.position -= 1
+            current_component.save()
+    component.delete()
+    return redirect(course)
 
 class ModuleCreate(View):       #class based view to override Post function
    
@@ -62,7 +105,6 @@ class ModuleCreate(View):       #class based view to override Post function
    
     def get (self, request, id):
         course = Course.objects.get(id = id)
-
         form = ModuleForm()
         component_form = ComponentForm()
         components = Component.objects.filter(course = course, module = None)

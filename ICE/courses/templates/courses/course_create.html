@@ -1,7 +1,7 @@
 <head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
-<title> Quiz </title>
+<title> Create Course </title>
 <div id = "header">
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
@@ -17,24 +17,17 @@
         <br> 
   </table>
 
-<body>
-<h3>Please, answer the following questions</h3>
-
-<form action = "{% url 'take_quiz_url' quiz_bank.id %}" method = "POST">
-    {% csrf_token %}    
-    {% for question in questions %}
-        <strong>{{question}}</strong>
+<h1>Create Course </h1>
+<div id = "createcourse">
+<form action = "{% url 'create_course_url'%}" method = "POST">
+    {% csrf_token %}
+    {% for field in form %}
+        {{field.label}}
         <br>
-        {{question.asnwer_options}} 
-        {% for answer_option in question.answer_options %}
-            <br>
-            <input type = 'radio' name = "{{question}}" value ="{{answer_option.id}}"> {{answer_option}}
-            
-        {% endfor %}
-        <br>
+        {{field}}
         <br>
     {% endfor %}
-
-    <button type = "Submit">Submit</button>
+    <input type = "hidden" name = "instructor" value = "{{instructor}}">
+</div>
+    <button type = "submit">Submit</button>
 </form>
-</body>

@@ -1,5 +1,22 @@
+<head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
+<title> Create Module </title>
+<div id = "header">
+<h2>  Welcome to <span> I.C.E. </span></h2>
+</div>
+</head>
+
+ <table id='banner'>
+        <tr>
+        <td id='menu1'> <a href = "{{ course_create_url }}"> <p>HOME</p> </a> </td>
+        <td id = 'menu2'> <a href = "{{ course_create_url }}"> <p>COURSES</p> </a> </td>
+        <td id='menu3'> <a href = "{{ course_create_url }}"> <p>RESULTS </p></a> </td>
+        <td id='menu4'> <a href = "{{ course_create_url }}"> <p>ENROLLMENT </p></a> </td>
+        <td id='rest'></td>
+        <br> 
+  </table>
+
 {{courseID}}
 <br>
 

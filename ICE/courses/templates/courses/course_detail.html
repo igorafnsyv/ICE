@@ -3,9 +3,22 @@
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
 <title> {{course.title}} </title>
 <div id = "header">
-<h2> Course Detail </h2>
+<h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
+
+ <table id='banner'>
+        <tr>
+        <td id='menu1'> <a href = "{{ course_create_url }}"> <p>HOME</p> </a> </td>
+        <td id = 'menu2'> <a href = "{{ course_create_url }}"> <p>COURSES</p> </a> </td>
+        <td id='menu3'> <a href = "{{ course_create_url }}"> <p>RESULTS </p></a> </td>
+        <td id='menu4'> <a href = "{{ course_create_url }}"> <p>ENROLLMENT </p></a> </td>
+        <td id='rest'></td>
+        <br> 
+  </table>
+
+
+<a href = "{% url 'course_list_url' %}">Course List</a>
 
 <h1>{{course.title}}</h1>
 {#{course.id}#}
@@ -13,16 +26,18 @@
 
   {% for module in modules%}
     <div id="moduletitle"> <h3> Module {{module.position}}: {{module.title}}</h3> </div>
+      <a href = "{% url 'delete_module_url' module.id %}"><button>Delete Module</button></a>
 
-
+<br>
+<br>
+<br>
     {% for component in module.components%}
-    
-        <h4> Lesson {{component.position}} : {{component}}  </h4>
+        <a href ="{% url 'delete_component_url' component.id %}"><button>Delete Component</button></a>
       {% if component.image %}
         <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
       {%endif%}
       {% if component.body %} <td>
-        <p>{{ component.body }}</p>
+        <div id="componentbody"><p>{{ component.body }}</p></div>
       {%endif%}
     {%endfor%}
   <!--  <a href = "{%url 'add_component_url' module.id %} ">Add Component</a> -->
@@ -33,7 +48,7 @@
     <br>
     <br>
     {%if module.quiz_bank %}
-        <i> <span>Quiz: </span>{{module.quiz_bank.0}}</i>
+        <div id="quiz"><i> <span>Quiz: </span>{{module.quiz_bank.0}}</i></div>
         <br>
         <br>
         <br>
