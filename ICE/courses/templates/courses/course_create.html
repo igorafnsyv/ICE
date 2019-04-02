@@ -1,4 +1,14 @@
-<h1>Course creation</h1>
+<head>
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
+<title> Create Course </title>
+<div id = "header">
+<h2>  Welcome to <span> I.C.E. </span></h2>
+</div>
+</head>
+
+<h1>Create Course </h1>
+<div id = "createcourse">
 <form action = "{% url 'create_course_url'%}" method = "POST">
     {% csrf_token %}
     {% for field in form %}
@@ -8,5 +18,6 @@
         <br>
     {% endfor %}
     <input type = "hidden" name = "instructor" value = "{{instructor}}">
+</div>
     <button type = "submit">Submit</button>
 </form>
