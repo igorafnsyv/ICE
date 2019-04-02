@@ -1,3 +1,5 @@
 ICE/db.sqlite3
 ICE/.idea
 ICE/.DS_Store
+__pycache__/
+
