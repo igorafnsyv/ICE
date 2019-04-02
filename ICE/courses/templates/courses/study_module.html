@@ -9,12 +9,12 @@
 
  <table id='banner'>
         <tr>
-        <td id='menu1'> <a href = "{{ course_create_url }}"> <p>HOME</p> </a> </td>
+        <td id='menu1'> <a href = "{% url 'course_list_url' %}"> <p>HOME</p> </a> </td>
         <td id = 'menu2'> <a href = "{{ course_create_url }}"> <p>COURSES</p> </a> </td>
         <td id='menu3'> <a href = "{{ course_create_url }}"> <p>RESULTS </p></a> </td>
         <td id='menu4'> <a href = "{{ course_create_url }}"> <p>ENROLLMENT </p></a> </td>
         <td id='rest'></td>
-        <br> 
+        <br>  
   </table>
 
 <h1><span>Module {{module.position}}:</span> {{module.title}}</h1>
