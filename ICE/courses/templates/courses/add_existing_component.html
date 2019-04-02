@@ -6,16 +6,12 @@
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
+<br>
+<nav id = 'banner'>
+        <a href = "{% url 'course_list_url' %}"> <p id='navP'>HOME </p> </a> 
+        <a href = "{% url 'add_component_url' %}">  <p id ='navP'> > Add Component </p>  </a>
+</nav>
 
- <table id='banner'>
-        <tr>
-        <td id='menu1'> <a href = "{% url 'course_list_url' %}"> <p>HOME</p> </a> </td>
-        <td id = 'menu2'> <a href = "{{ course_create_url }}"> <p>COURSES</p> </a> </td>
-        <td id='menu3'> <a href = "{{ course_create_url }}"> <p>RESULTS </p></a> </td>
-        <td id='menu4'> <a href = "{{ course_create_url }}"> <p>ENROLLMENT </p></a> </td>
-        <td id='rest'></td>
-        <br> 
-  </table>
 
 <h3>{{module.title}} </h3>
 <form action = "{% url 'add_component_url' module.id %}" method = "POST">
