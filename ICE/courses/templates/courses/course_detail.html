@@ -26,11 +26,13 @@
 
   {% for module in modules%}
     <div id="moduletitle"> <h3> Module {{module.position}}: {{module.title}}</h3> </div>
+      <a href = "{% url 'delete_module_url' module.id %}"><button>Delete Module</button></a>
 
 <br>
 <br>
 <br>
     {% for component in module.components%}
+        <a href ="{% url 'delete_component_url' component.id %}"><button>Delete Component</button></a>
       {% if component.image %}
         <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
       {%endif%}

@@ -11,5 +11,7 @@ urlpatterns = [
     path('study_course/<str:id>/', views.study_course, name = "study_course_url"),
     path('study_module/<str:id>/', views.study_module , name = "module_details_url"),
     path('create_course/', views.CourseCreate.as_view(), name = "create_course_url"),
+    path('delete_module/<str:id>/', views.module_delete, name='delete_module_url'),
+    path('delete_component/<str:id>/', views.component_delete, name='delete_component_url'),
 
 ]
