@@ -1,0 +1,11 @@
+{% load static %}
+
+<h1>Please, provide your Staff ID</h1>
+<form action = "{% url 'sign_up_url' %}", method="post" onsubmit= "return validateMyForm();">
+    {% csrf_token %}
+    <input id = 'staff_id' name ="id">
+    <button type ="submit">Submit</button>
+</form>
+<div id = 'message'></div>
+
+<script src = "{% static 'javascript/verify_staff_id.js' %}"></script>

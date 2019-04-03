@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'courses.apps.CoursesConfig',
     'quiz.apps.QuizConfig',
     'django_extensions',
+    'register.apps.RegisterConfig',
+
 ]
 
 MIDDLEWARE = [
