@@ -3,7 +3,8 @@
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
 <title> Home </title>
 <div id = "header">
-<h2 id="hello">  Hello <span>{{courses.0.instructor}}!&emsp;&emsp;<span></h2>
+
+<h2 id="hello">  Hello <span>{{ user.get_full_name }}!&emsp;&emsp;<span></h2>
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
@@ -14,8 +15,8 @@
         <td id = 'menu2'> <a href = "{{ course_create_url }}"> <p>COURSES</p> </a> </td>
         <td id='menu3'> <a href = "{{ course_create_url }}"> <p>RESULTS </p></a> </td>
         <td id='menu4'> <a href = "{{ course_create_url }}"> <p>ENROLLMENT </p></a> </td>
-        <td id='rest'></td>
-        <br> 
+        <td id='rest'> <a href = "/accounts/logout/"><p>Logout</p></a></td>
+        <br>
   </table>
 
 <body>
@@ -23,12 +24,12 @@
 {% for course in courses %}
 <table>
    <tr>
-   <h3>{{course.title}}</h3> 
+   <h3>{{course.title}}</h3>
    </tr>
    <tr>
  	<td id="td1">  <p>{{course.description}} </p> </td>
     <td id="td2"> <a href = "{{ course.get_absolute_url }}"> View Details > </a> </td>
-   </tr> 
+   </tr>
  </table>
 {% endfor %}
 <br>

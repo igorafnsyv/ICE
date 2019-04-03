@@ -1,5 +1,7 @@
 from django.db import models
 from django.shortcuts import reverse
+
+from django.contrib.auth.models import User
 # Create your models here.
 
 
@@ -8,8 +10,7 @@ from django.shortcuts import reverse
 
 class Learner (models.Model):
     name = models.CharField(max_length = 50, db_index = True)
-    email = models.EmailField(max_length = 50)
-    #password
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
     staff_id = models.IntegerField()
     courses = models.ManyToManyField('Course', blank = True)
     completed_modules = models.ManyToManyField('Module', blank = True)
@@ -19,8 +20,7 @@ class Learner (models.Model):
 
 class Instructor (models.Model):
     name = models.CharField(max_length = 50, db_index = True)
-    email = models.EmailField(max_length = 50)
-    #password
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
     introduction = models.TextField()
 
     def __str__(self):
@@ -30,9 +30,9 @@ class Instructor (models.Model):
 class Course(models.Model):
     title = models.CharField(max_length = 150, db_index = True)
     description = models.TextField(blank = False)
-    instructor = models.CharField(max_length = 40, db_index = True) 
-    #instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
-
+    #instructor = models.CharField(max_length = 40, db_index = True)
+    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
+    #current_learner = models.ManyToManyField(User, blank=True)
     #current_Learners -> learners who are taking course now
     #completed_Learners learner who has already completed the course
     credit_units = models.IntegerField(db_index = True, null = True, blank = True)

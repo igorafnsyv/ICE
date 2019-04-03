@@ -5,11 +5,10 @@ from courses.models import Course, Module
 class QuizBank(models.Model):
     title = models.CharField(max_length = 50, db_index = True)
     #instuctor
-    #course
     course = models.ForeignKey(Course, on_delete = models.CASCADE, null = True, blank = True)
     required_questions_num = models.IntegerField()
     pass_rate = models.IntegerField()
-    module = models.ForeignKey(Module, on_delete = models.CASCADE, null = True, blank = True)
+    module = models.ForeignKey(Module, on_delete = models.SET_NULL, null = True, blank = True)  # sets module filed to NULL when module is deleted
 
     def __str__(self):
         return self.title

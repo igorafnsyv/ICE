@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Course, Module, Component, Learner, Instructor
+from django.contrib.auth.models import Group, User
 from quiz.models import QuizBank
 from django.http import HttpResponse
 
@@ -8,25 +9,40 @@ from django.views.generic import View
 from .forms import ModuleForm, ComponentForm, CourseForm
 # Create your views here.
 
+# Course.objects.exclude(learner=learner)
+
+
+# since it is landing page, verify user type, depending on this, redirect users
+# admin to admin and others to the func
 def courses_list(request):
-    # has to return all courses that were created by this particular Instructor
-    courses = Course.objects.filter(instructor = "Dutch van der Linde") # assume this is default tutor now. How to get the name of the logged in tutor?
-    return render(request, "courses/courses_list.html", context = {'courses' : courses})
+    if request.user.is_anonymous:
+        return redirect ('/accounts/login/')
+    user = User.objects.get(username=request.user)
+    if str(request.user.groups.all()[0]) == 'Instructors':
+        # has to return all courses that were created by this particular Instructor
+        courses = Course.objects.filter(instructor = user.instructor)
+        # assume this is default tutor now. How to get the name of the logged in tutor?
+        return render(request, "courses/courses_list.html", context = {'courses' : courses})
+    else:
+        courses = Learner.objects.get(staff_id = user.learner.staff_id).courses.all()
+        return render (request, 'courses/learner_course_list.html', context = {'courses' : courses})
 
 
-def learner_course_list(request):   # mege it later with course_list
-    courses = Learner.objects.filter(staff_id = 1)[0].courses.all()          # later filter to actual staff_id
-    return render(request, "courses/learner_course_list.html", context = {'courses' : courses})
+#def learner_course_list(request):   # mege it later with course_list
+#    courses = Learner.objects.filter(staff_id = 1)[0].courses.all()          # later filter to actual staff_id
+ #   return render(request, "courses/learner_course_list.html", context = {'courses' : courses})
 
 
 
-def study_course(request, id):      # merge it later with course_detail
+def study_course(request, id):
+    # merge it later with course_detail
     course = Course.objects.get(id__iexact = id)
     modules = Module.objects.filter(course = course)
     print(modules)
     availability = True
-    learner = Learner.objects.filter(staff_id = 1)
-    completed_modules = learner[0].completed_modules.all()
+    #learner = Learner.objects.filter(staff_id = 1)
+    learner = request.user.learner
+    completed_modules = learner.completed_modules.all()
     for module in modules:
         if module in completed_modules:
             module.available = True
@@ -40,8 +56,9 @@ def study_module(request, id):
     module = Module.objects.get(id__iexact = id)
     components = Component.objects.filter(module = module).order_by('position')
     quiz_bank = QuizBank.objects.get(module = module)
-    quiz_taken = module in Learner.objects.get(staff_id = 1).completed_modules.all()    #change to proper staff id. Checks whether Learner completed this module
-    return render (request, 'courses/study_module.html', context = {'module' : module, 'components' : components, 'quiz_bank' : quiz_bank, 'quiz_taken' : quiz_taken})
+    #quiz_taken = module in Learner.objects.get(staff_id = 1).completed_modules.all()
+    quiz_taken = module in request.user.learner.completed_modules.all()
+    return render(request, 'courses/study_module.html', context = {'module' : module, 'components' : components, 'quiz_bank' : quiz_bank, 'quiz_taken' : quiz_taken})
 
 
 def course_detail(request, id):   #shows details of the particular course
@@ -60,7 +77,7 @@ def course_detail(request, id):   #shows details of the particular course
 class CourseCreate(View):
     def get(self, request):
         form = CourseForm()
-        instructor = "Dutch van der Linde"
+        instructor = request.user.instructor
         return render (request, 'courses/course_create.html', context = {'form' : form, 'instructor' : instructor})
 
     def post (self, request):
@@ -100,10 +117,10 @@ def component_delete(request, id):
     return redirect(course)
 
 class ModuleCreate(View):       #class based view to override Post function
-   
-   #need to identify instructor who created module
-   
+
     def get (self, request, id):
+        if request.user.is_anonymous:
+            redirect('/accounts/login/')
         course = Course.objects.get(id = id)
         form = ModuleForm()
         component_form = ComponentForm()
@@ -112,16 +129,16 @@ class ModuleCreate(View):       #class based view to override Post function
         return render (request, 'courses/module_create.html', context = {'form' : form, 'course' : course, 'comp_form' :component_form, 'components': components, 'quiz_banks' : quiz_banks})
 
     def post(self, request, id):
+        instructor = request.user.instructor
         course = Course.objects.get(id__iexact = id)
         bound_module = ModuleForm(request.POST)
-        instructor = Instructor.objects.get(name__iexact = "Dutch van der Linde")       #proper identification later
         if bound_module.is_valid():
             obj = bound_module.save(commit = False)
             obj.course = course
             obj.instructor = instructor                    
-            if 'position' not in request.POST:  #if Position is not specified by tutor
-                position = Module.objects.filter(course = course).count() #get total number of positions
-                obj.position = position + 1 #position = append to the ends
+            if 'position' not in request.POST:  # if Position is not specified by tutor
+                position = Module.objects.filter(course = course).count() # get total number of positions
+                obj.position = position + 1 # position = append to the ends
             obj.save()
             new_module = Module.objects.get(id = obj.id)
             component_position = 1
@@ -140,17 +157,17 @@ class ModuleCreate(View):       #class based view to override Post function
               
 
 class ComponentCreate(View):
-    #def get #should be used to create an interface for component creation
-    #need to identify instructor who created component
+    # def get #should be used to create an interface for component creation
+    # need to identify instructor who created component
     def get(self, request, id):
         component_form = ComponentForm()
         module = Module.objects.get(id = id)
         course = module.course
         components = Component.objects.filter(course = course, module = None)    #Should it be then either same Course or no Course?
         return render(request, 'courses/add_existing_component.html', context = {'form' : component_form, 'module' : module, 'components' : components})
-    def post(self, request, id):
 
-        #might result in a case that component is associated with module but not with course
+    def post(self, request, id):
+        # might result in a case that component is associated with module but not with course
         module = Module.objects.get(id__iexact = id) 
         course = module.course
         for key, componentID in request.POST.items():
