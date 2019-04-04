@@ -9,14 +9,16 @@ from django.contrib.auth.models import User
 
 
 class Learner (models.Model):
-    name = models.CharField(max_length = 50, db_index = True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
-    staff_id = models.IntegerField()
+    first_name = models.CharField(max_length = 50, db_index = True)
+    last_name = models.CharField(max_length = 50, db_index = True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null = True)
+    staff_id = models.CharField(max_length=8, db_index=True)
     courses = models.ManyToManyField('Course', blank = True)
+    email = models.EmailField(max_length=50, blank=True, null= True)
     completed_modules = models.ManyToManyField('Module', blank = True)
 
     def __str__(self):
-        return self.name
+        return self.first_name + " " + self.last_name
 
 class Instructor (models.Model):
     name = models.CharField(max_length = 50, db_index = True)
@@ -30,7 +32,6 @@ class Instructor (models.Model):
 class Course(models.Model):
     title = models.CharField(max_length = 150, db_index = True)
     description = models.TextField(blank = False)
-    #instructor = models.CharField(max_length = 40, db_index = True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
     #current_learner = models.ManyToManyField(User, blank=True)
     #current_Learners -> learners who are taking course now
