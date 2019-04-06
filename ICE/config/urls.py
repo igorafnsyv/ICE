@@ -17,8 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
- 
+
+from .views import redirect_courses
+
 urlpatterns = [
+    path('', redirect_courses),
     path('admin/', admin.site.urls),
     path('courses/', include('courses.urls')),
     path('quiz/', include('quiz.urls')),

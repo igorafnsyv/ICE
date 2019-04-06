@@ -1,7 +1,7 @@
     function checkPassword(){
-        let username = document.getElementById('username');
-        let password1 = document.getElementById('password1');
-        let password2 = document.getElementById('password2');
+        let username = document.getElementById('id_username');
+        let password1 = document.getElementById('id_password1');
+        let password2 = document.getElementById('id_password2');
 
         if (username.value=="" || password1.value=="" || password2.value==""){
             document.getElementById('error').innerHTML="Please, do not leave the fields blank";

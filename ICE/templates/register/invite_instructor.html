@@ -1,0 +1,12 @@
+<h1>Please, enter email of instructor you would like to invite</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    Email:<input name="email" type="email">
+    <br>
+    First name: <input name="first_name">
+    <br>
+    Last name: <input name="last_name">
+    <br>
+    <button type="submit">Invite</button>
+</form>
+

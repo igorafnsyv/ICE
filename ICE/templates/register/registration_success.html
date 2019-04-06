@@ -1,0 +1,11 @@
+<body onload="redirect();">
+<h1>Registration done successfully. You will be redirected to log in page soon</h1>
+</body>
+
+<script>
+function redirect() {
+    window.setTimeout(function(){
+        window.location.href = "{% url 'course_list_url' %}";
+    }, 3000);
+}
+</script>

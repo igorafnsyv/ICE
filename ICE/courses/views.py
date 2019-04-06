@@ -17,12 +17,15 @@ from .forms import ModuleForm, ComponentForm, CourseForm
 def courses_list(request):
     if request.user.is_anonymous:
         return redirect ('/accounts/login/')
+    if request.user.is_superuser:
+        return render(request, 'courses/admin_start_page.html', context={})
+
     user = User.objects.get(username=request.user)
     if str(request.user.groups.all()[0]) == 'Instructors':
         # has to return all courses that were created by this particular Instructor
-        courses = Course.objects.filter(instructor = user.instructor)
+        courses = Course.objects.filter(instructor=user.instructor)
         # assume this is default tutor now. How to get the name of the logged in tutor?
-        return render(request, "courses/courses_list.html", context = {'courses' : courses})
+        return render(request, "courses/courses_list.html", context = {'courses':courses})
     else:
         courses = Learner.objects.get(staff_id = user.learner.staff_id).courses.all()
         return render (request, 'courses/learner_course_list.html', context = {'courses' : courses})
@@ -161,21 +164,21 @@ class ComponentCreate(View):
     # need to identify instructor who created component
     def get(self, request, id):
         component_form = ComponentForm()
-        module = Module.objects.get(id = id)
+        module = Module.objects.get(id=id)
         course = module.course
-        components = Component.objects.filter(course = course, module = None)    #Should it be then either same Course or no Course?
-        return render(request, 'courses/add_existing_component.html', context = {'form' : component_form, 'module' : module, 'components' : components})
+        components = Component.objects.filter(course=course, module=None)
+        return render(request, 'courses/add_existing_component.html', context={'form' : component_form, 'module' : module, 'components' : components})
 
     def post(self, request, id):
         # might result in a case that component is associated with module but not with course
-        module = Module.objects.get(id__iexact = id) 
+        module = Module.objects.get(id__iexact=id)
         course = module.course
         for key, componentID in request.POST.items():
             if "component" in key:
-                component = Component.objects.get(id__iexact = componentID)
+                component = Component.objects.get(id__iexact=componentID)
                 component.module = module
                 current_position = 1
-                previous_components = Component.objects.filter(module = module).order_by('-position')
+                previous_components = Component.objects.filter(module=module).order_by('-position')
                 if len(previous_components) > 1:
                     current_position = previous_components[0].position + 1
                 component.position = current_position
