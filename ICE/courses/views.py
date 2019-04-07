@@ -16,7 +16,7 @@ from .forms import ModuleForm, ComponentForm, CourseForm
 # admin to admin and others to the func
 def courses_list(request):
     if request.user.is_anonymous:
-        return redirect ('/accounts/login/')
+        return redirect('/accounts/login/')
     if request.user.is_superuser:
         return render(request, 'courses/admin_start_page.html', context={})
 
@@ -25,77 +25,80 @@ def courses_list(request):
         # has to return all courses that were created by this particular Instructor
         courses = Course.objects.filter(instructor=user.instructor)
         # assume this is default tutor now. How to get the name of the logged in tutor?
-        return render(request, "courses/courses_list.html", context = {'courses':courses})
+        return render(request, 'courses/courses_list.html', context={'courses': courses})
     else:
-        courses = Learner.objects.get(staff_id = user.learner.staff_id).courses.all()
-        return render (request, 'courses/learner_course_list.html', context = {'courses' : courses})
-
-
-#def learner_course_list(request):   # mege it later with course_list
-#    courses = Learner.objects.filter(staff_id = 1)[0].courses.all()          # later filter to actual staff_id
- #   return render(request, "courses/learner_course_list.html", context = {'courses' : courses})
-
+        courses = Learner.objects.get(staff_id=user.learner.staff_id).courses.all()
+        return render(request, 'courses/learner_course_list.html', context={'courses': courses})
 
 
 def study_course(request, id):
     # merge it later with course_detail
-    course = Course.objects.get(id__iexact = id)
-    modules = Module.objects.filter(course = course)
+    course = Course.objects.get(id__iexact=id)
+    modules = Module.objects.filter(course=course)
     print(modules)
     availability = True
-    #learner = Learner.objects.filter(staff_id = 1)
     learner = request.user.learner
     completed_modules = learner.completed_modules.all()
     for module in modules:
         if module in completed_modules:
             module.available = True
-        else :
+        else:
             module.available = availability
             availability = False
         
-    return render(request, "courses/study_course.html", context = {"course": course, "modules" : modules, "learner" : learner})
+    return render(request, "courses/study_course.html", context={'course': course,
+                                                                 'modules': modules,
+                                                                 'learner': learner})
 
-def study_module(request, id):
+def study_module (request, id):
     module = Module.objects.get(id__iexact = id)
     components = Component.objects.filter(module = module).order_by('position')
     quiz_bank = QuizBank.objects.get(module = module)
-    #quiz_taken = module in Learner.objects.get(staff_id = 1).completed_modules.all()
+
     quiz_taken = module in request.user.learner.completed_modules.all()
-    return render(request, 'courses/study_module.html', context = {'module' : module, 'components' : components, 'quiz_bank' : quiz_bank, 'quiz_taken' : quiz_taken})
+    return render(request, 'courses/study_module.html', context={'module': module,
+                                                                 'components': components,
+                                                                 'quiz_bank': quiz_bank,
+                                                                 'quiz_taken': quiz_taken})
 
 
-def course_detail(request, id):   #shows details of the particular course
-    course = Course.objects.get(id__iexact = id)
-    modules = Module.objects.filter(course = course).order_by('position')
+def course_detail(request, id):   # shows details of the particular course
+    course = Course.objects.get(id__iexact=id)
+    modules = Module.objects.filter(course=course).order_by('position')
     components = []
     for module in modules:
-        elem = Component.objects.filter(module = module).order_by('position')
-        module.components = elem        #stores each component related to that module in module object
-        quiz_bank = QuizBank.objects.filter(module = module)[:1]
+        elem = Component.objects.filter(module=module).order_by('position')
+
+        # stores each component related to that module in module object
+        module.components = elem
+        quiz_bank = QuizBank.objects.filter(module=module)[:1]
         module.quiz_bank = quiz_bank
         
-    return render(request, "courses/course_detail.html", context = {"course" : course , "modules" : modules, "components": components})
+    return render(request, 'courses/course_detail.html', context={'course': course,
+                                                                  'modules': modules,
+                                                                  'components': components})
 
 
 class CourseCreate(View):
     def get(self, request):
         form = CourseForm()
         instructor = request.user.instructor
-        return render (request, 'courses/course_create.html', context = {'form' : form, 'instructor' : instructor})
+        return render(request, 'courses/course_create.html', context={'form': form,
+                                                                       'instructor': instructor})
 
     def post (self, request):
         bound_course = CourseForm(request.POST)
         
         instructor = request.POST['instructor']
         if bound_course.is_valid:
-            obj = bound_course.save(commit = False)
+            obj = bound_course.save(commit=False)
             obj.instructor = instructor
             obj.save()
         courses = Course.objects.all()
         return redirect(courses[len(courses) - 1])
 
-def module_delete(request, id):
-    module = Module.objects.get(id__iexact = id)
+def module_delete (request, id):
+    module = Module.objects.get(id__iexact=id)
     course = module.course
     removed_position = module.position
     all_modules = Module.objects.filter(course=course)
@@ -106,7 +109,7 @@ def module_delete(request, id):
     module.delete()
     return redirect (course)
 
-def component_delete(request, id):
+def component_delete (request, id):
     component = Component.objects.get(id__iexact=id)
     module = component.module
     course = module.course
@@ -119,41 +122,52 @@ def component_delete(request, id):
     component.delete()
     return redirect(course)
 
-class ModuleCreate(View):       #class based view to override Post function
+# class based view to override Post function
+class ModuleCreate (View):
 
     def get (self, request, id):
         if request.user.is_anonymous:
             redirect('/accounts/login/')
-        course = Course.objects.get(id = id)
+        course = Course.objects.get(id=id)
         form = ModuleForm()
         component_form = ComponentForm()
-        components = Component.objects.filter(course = course, module = None)
-        quiz_banks = QuizBank.objects.filter(course = course, module = None)
-        return render (request, 'courses/module_create.html', context = {'form' : form, 'course' : course, 'comp_form' :component_form, 'components': components, 'quiz_banks' : quiz_banks})
+        components = Component.objects.filter(course=course, module=None)
+        quiz_banks = QuizBank.objects.filter(course=course, module=None)
+        return render (request, 'courses/module_create.html', context={'form': form,
+                                                                       'course': course,
+                                                                       'comp_form': component_form,
+                                                                       'components': components,
+                                                                       'quiz_banks': quiz_banks})
 
     def post(self, request, id):
         instructor = request.user.instructor
-        course = Course.objects.get(id__iexact = id)
+        course = Course.objects.get(id__iexact=id)
         bound_module = ModuleForm(request.POST)
         if bound_module.is_valid():
-            obj = bound_module.save(commit = False)
+            obj = bound_module.save(commit=False)
             obj.course = course
-            obj.instructor = instructor                    
-            if 'position' not in request.POST:  # if Position is not specified by tutor
-                position = Module.objects.filter(course = course).count() # get total number of positions
-                obj.position = position + 1 # position = append to the ends
+            obj.instructor = instructor
+
+            # if Position is not specified by tutor
+            if 'position' not in request.POST:
+
+                # get total number of positions
+                position = Module.objects.filter(course = course).count()
+
+                # position = append to the ends
+                obj.position = position + 1
             obj.save()
-            new_module = Module.objects.get(id = obj.id)
+            new_module = Module.objects.get(id=obj.id)
             component_position = 1
             for key, value in request.POST.items():
                 if "component" in key:
-                    component = Component.objects.get(id__iexact = value)
+                    component = Component.objects.get(id__iexact=value)
                     component.module = new_module
                     component.position = component_position
                     component_position += 1
                     component.save()
                 if 'quiz' in key:
-                    quiz_bank = QuizBank.objects.get(id__iexact = value)
+                    quiz_bank = QuizBank.objects.get(id__iexact=value)
                     quiz_bank.module = new_module
                     quiz_bank.save()
             return redirect(course)
@@ -167,13 +181,19 @@ class ComponentCreate(View):
         module = Module.objects.get(id=id)
         course = module.course
         components = Component.objects.filter(course=course, module=None)
-        return render(request, 'courses/add_existing_component.html', context={'form' : component_form, 'module' : module, 'components' : components})
+        return render(request, 'courses/add_existing_component.html', context={'form': component_form,
+                                                                               'module': module,
+                                                                               'components': components})
 
     def post(self, request, id):
         # might result in a case that component is associated with module but not with course
         module = Module.objects.get(id__iexact=id)
         course = module.course
+
+        # traverse dictionary as key value pair
         for key, componentID in request.POST.items():
+
+            # if string 'component' is found in key
             if "component" in key:
                 component = Component.objects.get(id__iexact=componentID)
                 component.module = module
