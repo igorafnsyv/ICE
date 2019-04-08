@@ -8,8 +8,8 @@
 </head>
 <br>
 <nav id = 'banner'>
-        <a href = "{% url 'student_course_list_url' %}"> <p id='navP'> HOME </p> </a> 
-        <a href = "{% url 'take_quiz_url' %}">  <p id ='navP'> > Quiz </p>  </a>
+        <a href = "{% url 'course_list_url' %}"> <p id='navP'> HOME </p> </a>
+        <a href = "{% url 'take_quiz_url' quiz_bank.id %}">  <p id ='navP'> > Quiz </p>  </a>
 </nav>
 
 <body>

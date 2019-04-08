@@ -14,12 +14,13 @@
     <button type ="submit">Submit</button>
 </form>
 
+<!--Check if any category has been selected-->
 {% if selected_category %}
     <h3>Course from {{ selected_category }} category</h3>
 {% else %}
     <h3>Or view all courses as a list</h3>
-
 {% endif %}
+
 {% for course in courses %}
     Course Title: {{ course.title }}
     <br>

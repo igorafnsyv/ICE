@@ -38,11 +38,9 @@ def all_courses(request):
     this_learner = Learner.objects.get(user= request.user)
     courses_can_enroll = Course.objects.filter(status=1).exclude(learner=this_learner)
     categories = Category.objects.all()
-    print()
-    print()
-    print(request.GET)
     selected_category = ''
 
+    # if user has selected category, extract it and shoe courses from that category
     if request.GET:
         selected_category = Category.objects.get(title=request.GET['category'])
         courses_can_enroll = courses_can_enroll.filter(category=selected_category)

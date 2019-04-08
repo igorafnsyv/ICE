@@ -9,14 +9,26 @@
 
 <br>
 <nav id = 'banner'>
-        <a href = "{% url 'student_course_list_url' %}"> <p id='navP'> HOME </p> </a> 
+        <a href = "{% url 'course_list_url' %}"> <p id='navP'> HOME </p> </a>
         <a href = "">  <p id ='navP'> > Quiz Results </p>  </a>
 </nav>
 
 
 <body>
+
+{% if course_completed %}
+
+    <h1>You have completed the course</h1>
+
+{% endif %}
+
 {% if result%}
-    <h1>You have passed the quiz. Your result is {{result }}%. Next module is unlocked</h1>
+    <h1>You have passed the quiz. Your result is {{result }}%</h1>
+
+    {% if not course_completed %}
+        <h1>Next module is unlocked</h1>
+    {% endif %}
+
 {%  endif   %}
 
 {% if fail%}
