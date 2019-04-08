@@ -11,7 +11,8 @@
  <table id='banner'>
         <tr>
         <td id='menu1'> <a href = "{% url 'course_list_url' %}"> <p>HOME</p> </a> </td>
-        <td id='rest'> <a href = "/accounts/logout/"><p>Logout</p></a></td>
+        <td id='rest'> <a href = "{% url 'courses_for_enrollment_url' %}"><p>Courses available for enrollment</p></a></td>
+            <td id='rest'> <a href = "/accounts/logout/"><p>Logout</p></a></td>
         <td id='rest'></td>
         <br> 
   </table>

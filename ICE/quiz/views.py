@@ -15,7 +15,7 @@ from django.views.generic import View
 class QuizAdd(View):
 
     def get(self, request, id):
-        module = Module.objects.get(id__iexact = id)
+        module = Module.objects.get(id__iexact=id)
         quiz_banks = QuizBank.objects.filter(module = None)    #either no Module assigned or no course assigned
         quiz_bank_form = QuizForm()
         return render (request, 'quiz/add_existing_quiz_bank.html', context = {'module' : module, 'quiz_banks' : quiz_banks, 'form' : quiz_bank_form}) 
@@ -57,20 +57,18 @@ class QuizTake(View):
         pass_rate = quiz_bank.pass_rate
         result = 0
 
-    
         for question, answer in request.POST.items():
             if answer.isdigit():
                 answer_result = AnswerOptions.objects.get(id = answer)
                 if answer_result.correct_incorrect:
                     result += 1
 
-
         if result / quiz_bank.required_questions_num >= pass_rate / 100:
                 learner = Learner.objects.get(staff_id = 1)   #change later
                 learner.completed_modules.add(quiz_bank.module)
                 learner.save()
                 result_percent = result / quiz_bank.required_questions_num * 100
-                return render(request, "quiz/quiz_result.html", context = {"result" : result_percent, 'course' : quiz_bank.course})
+                return render(request, "quiz/quiz_result.html", context={"result" : result_percent, 'course' : quiz_bank.course})
                 
         fail = True        
-        return render(request, "quiz/quiz_result.html", context = {"fail" : fail, 'course' : quiz_bank.course})
+        return render(request, "quiz/quiz_result.html", context={"fail" : fail, 'course' : quiz_bank.course})

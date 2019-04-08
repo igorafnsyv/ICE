@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Course, Module, Component, Learner, Instructor
+from .models import Course, Module, Component, Learner, Instructor, Category
 from django.contrib.auth.models import Group, User
 from quiz.models import QuizBank
 from django.http import HttpResponse
@@ -10,6 +10,7 @@ from .forms import ModuleForm, ComponentForm, CourseForm
 # Create your views here.
 
 # Course.objects.exclude(learner=learner)
+# course[0].learner_set.all() to get all learners in the course
 
 
 # since it is landing page, verify user type, depending on this, redirect users
@@ -24,11 +25,43 @@ def courses_list(request):
     if str(request.user.groups.all()[0]) == 'Instructors':
         # has to return all courses that were created by this particular Instructor
         courses = Course.objects.filter(instructor=user.instructor)
-        # assume this is default tutor now. How to get the name of the logged in tutor?
         return render(request, 'courses/courses_list.html', context={'courses': courses})
     else:
         courses = Learner.objects.get(staff_id=user.learner.staff_id).courses.all()
         return render(request, 'courses/learner_course_list.html', context={'courses': courses})
+
+
+# returns all courses available for enrollment
+def all_courses(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    this_learner = Learner.objects.get(user= request.user)
+    courses_can_enroll = Course.objects.filter(status=1).exclude(learner=this_learner)
+    categories = Category.objects.all()
+    print()
+    print()
+    print(request.GET)
+    selected_category = ''
+
+    if request.GET:
+        selected_category = Category.objects.get(title=request.GET['category'])
+        courses_can_enroll = courses_can_enroll.filter(category=selected_category)
+
+    return render(request, 'courses/courses_for_enrollment.html', context={'courses': courses_can_enroll,
+                                                                           'categories': categories,
+                                                                           'selected_category': selected_category})
+
+
+def course_enroll(request, course_id):
+
+    # Where do we redirect after enrollment? To the list of courses learner enrolled or continue enrollment?
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    this_learner = request.user.learner
+    course = Course.objects.get(id=course_id)
+    this_learner.courses.add(course)
+    this_learner.save()
+    return redirect(course)
 
 
 def study_course(request, id):
@@ -50,10 +83,11 @@ def study_course(request, id):
                                                                  'modules': modules,
                                                                  'learner': learner})
 
+
 def study_module (request, id):
-    module = Module.objects.get(id__iexact = id)
-    components = Component.objects.filter(module = module).order_by('position')
-    quiz_bank = QuizBank.objects.get(module = module)
+    module = Module.objects.get(id__iexact=id)
+    components = Component.objects.filter(module=module).order_by('position')
+    quiz_bank = QuizBank.objects.get(module=module)
 
     quiz_taken = module in request.user.learner.completed_modules.all()
     return render(request, 'courses/study_module.html', context={'module': module,
@@ -84,12 +118,12 @@ class CourseCreate(View):
         form = CourseForm()
         instructor = request.user.instructor
         return render(request, 'courses/course_create.html', context={'form': form,
-                                                                       'instructor': instructor})
+                                                                      'instructor': instructor})
 
     def post (self, request):
         bound_course = CourseForm(request.POST)
-        
-        instructor = request.POST['instructor']
+        instructor = Instructor.objects.get(first_name=request.POST['instructor_first_name'],
+                                            last_name=request.POST['instructor_last_name'])
         if bound_course.is_valid:
             obj = bound_course.save(commit=False)
             obj.instructor = instructor
@@ -97,7 +131,9 @@ class CourseCreate(View):
         courses = Course.objects.all()
         return redirect(courses[len(courses) - 1])
 
-def module_delete (request, id):
+
+# can be merged with component delete
+def module_delete(request, id):
     module = Module.objects.get(id__iexact=id)
     course = module.course
     removed_position = module.position
@@ -107,9 +143,10 @@ def module_delete (request, id):
             current_module.position -= 1
             current_module.save()
     module.delete()
-    return redirect (course)
+    return redirect(course)
 
-def component_delete (request, id):
+
+def component_delete(request, id):
     component = Component.objects.get(id__iexact=id)
     module = component.module
     course = module.course
@@ -122,10 +159,11 @@ def component_delete (request, id):
     component.delete()
     return redirect(course)
 
+
 # class based view to override Post function
 class ModuleCreate (View):
 
-    def get (self, request, id):
+    def get(self, request, id):
         if request.user.is_anonymous:
             redirect('/accounts/login/')
         course = Course.objects.get(id=id)
@@ -133,11 +171,11 @@ class ModuleCreate (View):
         component_form = ComponentForm()
         components = Component.objects.filter(course=course, module=None)
         quiz_banks = QuizBank.objects.filter(course=course, module=None)
-        return render (request, 'courses/module_create.html', context={'form': form,
-                                                                       'course': course,
-                                                                       'comp_form': component_form,
-                                                                       'components': components,
-                                                                       'quiz_banks': quiz_banks})
+        return render(request, 'courses/module_create.html', context={'form': form,
+                                                                      'course': course,
+                                                                      'comp_form': component_form,
+                                                                      'components': components,
+                                                                      'quiz_banks': quiz_banks})
 
     def post(self, request, id):
         instructor = request.user.instructor
@@ -152,7 +190,7 @@ class ModuleCreate (View):
             if 'position' not in request.POST:
 
                 # get total number of positions
-                position = Module.objects.filter(course = course).count()
+                position = Module.objects.filter(course=course).count()
 
                 # position = append to the ends
                 obj.position = position + 1

@@ -22,7 +22,9 @@
         {{field}}
         <br>
     {% endfor %}
-    <input type = "hidden" name = "instructor" value = "{{instructor}}">
+    <input type = "hidden" name = "instructor_first_name" value = "{{instructor.first_name}}">
+    <input type = "hidden" name = "instructor_last_name" value = "{{instructor.last_name}}">
+
 </div>
     <button type = "submit">Submit</button>
 </form>

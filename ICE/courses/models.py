@@ -5,7 +5,13 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
-#Store Categories? 
+# Store Categories?
+
+class Category(models.Model):
+    title = models.CharField(max_length=50, db_index= True, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Learner (models.Model):
@@ -19,6 +25,7 @@ class Learner (models.Model):
 
     def __str__(self):
         return self.first_name + " " + self.last_name
+
 
 class Instructor (models.Model):
     first_name = models.CharField(max_length = 50, db_index = True)
@@ -35,15 +42,18 @@ class Course(models.Model):
     title = models.CharField(max_length = 150, db_index = True)
     description = models.TextField(blank = False)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
-    #current_learner = models.ManyToManyField(User, blank=True)
-    #current_Learners -> learners who are taking course now
-    #completed_Learners learner who has already completed the course
-    credit_units = models.IntegerField(db_index = True, null = True, blank = True)
-    status = models.IntegerField(db_index = True, null = True, blank = True) # value 1 if course is opened, 0 if closed
-    category = models.CharField(max_length = 150, db_index = True)
+    # current_learner = models.ManyToManyField(User, blank=True)
+    # current_Learners -> learners who are taking course now
+    # completed_Learners learner who has already completed the course
+    credit_units = models.IntegerField(db_index=True, null=True, blank=True)
+
+    # value 1 if course is opened, 0 if closed
+    status = models.IntegerField(db_index=True, null=True, blank=True)
+    #category = models.CharField(max_length=150, db_index = True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
     def get_absolute_url(self):
-        return reverse('course_detail_url', kwargs = {'id' : self.id})
+        return reverse('course_detail_url', kwargs={'id': self.id})
 
     def __str__(self):
         return '{}'.format(self.title)
@@ -51,7 +61,7 @@ class Course(models.Model):
 
 class Module(models.Model):
 
-    title = models.CharField(max_length = 150, db_index = True)
+    title = models.CharField(max_length=150, db_index=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null = True, blank = True)
     position = models.IntegerField(db_index = True, null = True, blank = True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
@@ -67,13 +77,15 @@ class Component(models.Model):
     
     title = models.CharField(max_length = 50, db_index = True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
-    body = models.TextField(blank = True) #either Text component or image component
-    image = models.ImageField(upload_to = 'images/', blank = True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, null = True, blank = True)
-    module = models.ForeignKey(Module, on_delete=models.CASCADE, null = True, blank = True)
-    date_created = models.DateTimeField(auto_now_add = True) #constant
-    date_updated = models.DateTimeField(auto_now_add = True)
-    position = models.IntegerField(null = True, blank = True)
+
+    # either Text component or image component
+    body = models.TextField(blank = True)
+    image = models.ImageField(upload_to='images/', blank=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True) #constant
+    date_updated = models.DateTimeField(auto_now_add=True)
+    position = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.title) 

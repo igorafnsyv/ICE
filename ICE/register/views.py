@@ -13,6 +13,7 @@ import requests
 
 from django.http import HttpResponse
 
+
 class SignUp (View):
 
     def get(self, request):
