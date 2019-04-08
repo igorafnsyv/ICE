@@ -1,4 +1,13 @@
-{% load static %}
+<head>
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
+<title> Add Component </title>
+<div id = "header">
+<h2>  Welcome to <span> I.C.E. </span></h2>
+</div>
+</head>
+<br>
+
 
 <h1>Please, provide your Staff ID</h1>
 <form action = "{% url 'sign_up_url' %}", method="post" onsubmit= "return validateMyForm();">
