@@ -1,12 +1,16 @@
 <head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
-<title> Add Component </title>
+<title> Logout </title>
 <div id = "header">
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
 <br>
+<br>
+<br>
+<br>
+<br>
 
-  <p>Logged out!</p>
-  <a href="{% url 'login'%}">Click here to login again.</a>
+  <h3 id="successmessage">You have been logged out!</h3>
+  <p id="successmessage"> <a href="{% url 'login'%}">Click here to login again.</a> </p>

@@ -9,8 +9,9 @@ button {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-
 }
+
+
 body {
 	font-family: "helvetica";
 	background-color: #f2f2f2;
@@ -146,7 +147,7 @@ form {
 }
 
 #logintable {
-	width: 200px;
+	width: 250px;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -173,6 +174,58 @@ form {
 	border-left: 1px solid white;
 }
 
+#signupdiv {
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#staff_id {
+	width: 255px;
+}
+
+#newpassword{
+	display: inline;
+}
+
+#submitbutton {
+	margin-right: 35px;
+}
+
+#successmessage {
+	text-align: center;
+}
+
+#resetbutton{
+	background-color: #404040;
+	padding-top: 7px;
+	padding-bottom:7px;
+	padding-right:20px;
+	padding-left: 20px;
+	color:white;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	display: inline;
+}
+
+#passwordtable {
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: right;
+}
+
+#changebutton{
+	background-color: #404040;
+	padding-top: 7px;
+	padding-bottom:7px;
+	padding-right:20px;
+	padding-left: 20px;
+	color:white;
+	display: block;
+	margin-left: 0px;
+}
 
 
 
