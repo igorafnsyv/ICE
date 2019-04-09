@@ -7,6 +7,16 @@
 </div>
 </head>
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h5> Log in </h5>
+<div id='logindiv'>
+<p> or <a href="{% url 'sign_up_url' %}">Sign up</a> </p>
+</div>
+<br>
 
 {% if form.errors %}
     <p>Your username and password did not match. Please, try again</p>
@@ -22,23 +32,25 @@
     {% endif %}
 <form method="post" action="{% url 'login' %}">
 {% csrf_token %}
-<table>
-
+<table id ='logintable'>
 <tr>
-  <td>{{ form.username.label_tag }}</td>
-  <td>{{ form.username }}</td>
+  <td id ='logintd'>{{ form.username.label_tag }}</td>
+  <td id ='logintd'>{{ form.username }}</td>
 </tr>
 
 <tr>
-  <td>{{ form.password.label_tag }}</td>
-  <td>{{ form.password }}</td>
+  <td id ='logintd'>{{ form.password.label_tag }}</td>
+  <td id ='logintd'>{{ form.password }}</td>
 </tr>
 </table>
 
+
+<div id='logindiv'>
 <input type="submit" value="login" />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-<p><a href="{% url 'sign_up_url' %}">Sign up</a></p>
+<br>
+<a href="{% url 'password_reset' %}"><p>Lost password?</p></a>
+</div>
