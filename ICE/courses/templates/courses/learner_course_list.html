@@ -3,16 +3,16 @@
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
 <title> Home </title>
 <div id = "header">
-<!--<h2 id="hello">  Hello <span>{{courses.0.instructor}}!&emsp;&emsp;<span></h2>-->
+<a href = "/accounts/logout/"><h2 id="logout"> Logout</h2></a>
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
+
 
  <table id='banner'>
         <tr>
         <td id='menu1'> <a href = "{% url 'course_list_url' %}"> <p>HOME</p> </a> </td>
         <td id='rest'> <a href = "{% url 'courses_for_enrollment_url' %}"><p>Courses available for enrollment</p></a></td>
-            <td id='rest'> <a href = "/accounts/logout/"><p>Logout</p></a></td>
         <td id='rest'></td>
         <br> 
   </table>

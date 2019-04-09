@@ -118,6 +118,7 @@ form {
 	float: right;
 	font-size:15px;
 	padding-top: 9px;
+	padding-right: 10px;
 }
 
 #td1{
@@ -160,6 +161,16 @@ form {
 #logintd {
 	border-bottom: none;
 	margin-top: 0px;
+}
+
+#logout {
+	float: right;
+	font-size:15px;
+	padding-top: 9px;
+	padding-bottom: 9px;
+	padding-right: 18px;
+	padding-left: 18px;
+	border-left: 1px solid white;
 }
 
 
