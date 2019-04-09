@@ -1,7 +1,7 @@
 <head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
-<title> Add Component </title>
+<title> Registration </title>
 <div id = "header">
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
@@ -15,7 +15,7 @@
 <br>
 
 <div id="signupdiv">
-<h3>Please, provide your Staff ID</h3>
+<h3>Please, provide your Staff ID.</h3>
 
 <form action = "{% url 'sign_up_url' %}", method="post" onsubmit= "return validateMyForm();">
     {% csrf_token %}

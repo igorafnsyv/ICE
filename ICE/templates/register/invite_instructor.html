@@ -1,22 +1,30 @@
 <head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
-<title> Add Component </title>
+<title> Registration</title>
 <div id = "header">
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
 <br>
+<br>
+<br>
 
-<h1>Please, enter email of instructor you would like to invite</h1>
+<h3 id="successmessage">Please, enter email of instructor you would like to invite.</h3>
+<div id="logindiv">
+<table>
 <form action="" method="post">
+
     {% csrf_token %}
-    Email:<input name="email" type="email">
+    <tr><td id="logintd"> Email: </td> <td id="logintd"> <input name="email" type="email"> </td> </tr>
     <br>
-    First name: <input name="first_name">
+    <tr><td id="logintd"> First name:</td> <td id="logintd">  <input name="first_name"> </td></tr>
     <br>
-    Last name: <input name="last_name">
+    <tr><td id="logintd"> Last name: </td> <td id="logintd"> <input name="last_name"> </td></tr>
     <br>
-    <button type="submit">Invite</button>
+  </table>
+     <br>
+    <button id="resetbutton" type="submit">Invite</button>
 </form>
+</div>
 

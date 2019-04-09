@@ -224,7 +224,12 @@ form {
 	padding-left: 20px;
 	color:white;
 	display: block;
-	margin-left: 0px;
+	margin-lefts: 0px;
+}
+
+#registerdiv {
+	width: 400px;
+	margin-left:40%;
 }
 
 
