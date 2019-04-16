@@ -14,6 +14,13 @@ import requests
 from django.http import HttpResponse
 
 
+def verify_username(request, username):
+    user_name_exists = User.objects.filter(username=username).exists()
+    if user_name_exists:
+        return HttpResponse('False')
+    return HttpResponse('True')
+
+
 class SignUp (View):
 
     def get(self, request):
@@ -72,6 +79,9 @@ class RegisterUser (View):
                                                                             'user_type': type})
 
     def post(self, request, email, type):
+        if not Group.objects.all().exists():
+            Group.objects.create(name='Learners')
+            Group.objects.create(name='Instructors')
         if int(type) == 1:
             learner = Learner.objects.get(email=email)
             first_name = learner.first_name

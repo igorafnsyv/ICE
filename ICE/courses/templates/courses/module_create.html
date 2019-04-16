@@ -11,7 +11,7 @@
 <br>
 <nav id = 'banner'>
         <a href = "{% url 'course_list_url' %}"> <p id='navP'> HOME </p> </a> 
-        <a href = "{% url 'create_module_url' %}">  <p id ='navP'> > Create Module </p>  </a>
+        <a href = "{% url 'create_module_url' course.id %}">  <p id ='navP'> > Create Module </p>  </a>
 </nav>
 
 {{courseID}}

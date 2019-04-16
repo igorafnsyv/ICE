@@ -39,8 +39,8 @@ class Instructor (models.Model):
 
 
 class Course(models.Model):
-    title = models.CharField(max_length = 150, db_index = True)
-    description = models.TextField(blank = False)
+    title = models.CharField(max_length=150, db_index=True)
+    description = models.TextField(blank=False)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
     # current_learner = models.ManyToManyField(User, blank=True)
     # current_Learners -> learners who are taking course now
@@ -83,15 +83,17 @@ class Module(models.Model):
 
 class Component(models.Model):
     
-    title = models.CharField(max_length = 50, db_index = True)
+    title = models.CharField(max_length=50, db_index=True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
 
     # either Text component or image component
-    body = models.TextField(blank = True)
+    body = models.TextField(blank=True)
     image = models.ImageField(upload_to='images/', blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
     module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
-    date_created = models.DateTimeField(auto_now_add=True) #constant
+
+    # todo date_created must be kept constant, while date_update is var
+    date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now_add=True)
     position = models.IntegerField(null=True, blank=True)
 
