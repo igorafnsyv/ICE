@@ -19,10 +19,11 @@
 <div id="successmessage">
 {% if user.is_superuser %}
     <h3>Email was sent to the Instructor</h3>
+    <a href="/admin"><button>Return to Admin panel</button></a>
+    <br>
+    <a href={% url 'sign_up_url' %}><button>Invite Another Instructor</button></a>
 {% else %}
     <h3>We have sent you an email with link to complete your registration</h3>
 {% endif %}
 </div>
-<a href="/admin"><button>Return to Admin panel</button></a>
-<br>
-<a href={% url 'sign_up_url' %}><button>Invite Another Instructor</button></a>
+

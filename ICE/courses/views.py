@@ -9,9 +9,6 @@ from django.views.generic import View
 from .forms import ModuleForm, ComponentForm, CourseForm
 # Create your views here.
 
-# Course.objects.exclude(learner=learner)
-# course[0].learner_set.all() to get all learners in the course
-
 
 # since it is landing page, verify user type, depending on this, redirect users
 # admin to admin and others to the func
@@ -63,7 +60,6 @@ def course_enroll(request, course_id):
     return redirect('course_list_url')
 
 
-# todo rename variable id to course_id
 def study_course(request, course_id):
     # todo merge with course detail
     if request.user.is_anonymous:
@@ -86,7 +82,6 @@ def study_course(request, course_id):
                                                                  'learner': learner})
 
 
-# todo rename variable id to module_id
 def study_module(request, module_id):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
@@ -175,8 +170,16 @@ def component_delete(request, component_id):
     return redirect(course)
 
 
+def component_remove_module(request, component_id):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    component = Component.objects.get(id=component_id)
+    component.module = None
+    component.save()
+    return redirect(component.course)
 # class based view to override Post function
-# todo rename variable id to course_id
+
+
 class ModuleCreate (View):
 
     def get(self, request, course_id):

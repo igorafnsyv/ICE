@@ -14,5 +14,6 @@ urlpatterns = [
     path('delete_component/<str:component_id>/', views.component_delete, name='delete_component_url'),
     path('available_enrollment/', views.all_courses, name='courses_for_enrollment_url'),
     path('enroll/<str:course_id>/', views.course_enroll, name='enroll_in_course_url'),
+    path('component_free/<str:component_id>', views.component_remove_module, name='component_remove_module_url'),
 
 ]
