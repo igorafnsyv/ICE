@@ -1,0 +1,12 @@
+<h1>This is the list of the courses you have completed</h1>
+
+{% for completion in completion_records %}
+
+    <h3>{{ completion.course.title }}</h3>
+    <h5>Credits Awarded: {{ completion.course.credit_units }} </h5>
+    <h5>Completion Date:  {{ completion.date_completed }} </h5>
+    <h4>Cumulative CECU after course was completed:  {{ completion.cumulative_credits }} </h4>
+    <br>
+{% endfor %}
+
+<h2>You have earned {{ total_credits }} credits in total</h2>

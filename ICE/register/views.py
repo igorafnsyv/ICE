@@ -21,6 +21,21 @@ def verify_username(request, username):
     return HttpResponse('True')
 
 
+def send_email(email, name, user_type, subject, email_template):
+    subject, from_email, to = subject, 'admin@ice.com', email
+    text_content = ''
+    html_content = render_to_string(email_template,
+                                    context={'name': name,
+                                             'protocol': 'http',
+                                             'domain': 'localhost:8000',
+                                             'email': email,
+                                             'user_type': user_type})
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+    return None
+
+
 class SignUp (View):
 
     def get(self, request):
@@ -57,22 +72,8 @@ class SignUp (View):
                                        staff_id=req.json()['id'],
                                        email=email)
         # email content
-        self.send_email(email, name, user_type)
+        send_email(email, name, user_type, 'Registration link', 'register/signup_email.html')
         return render(request, 'register/signup_success.html', context={})
-
-    def send_email(self, email, name, user_type):
-        subject, from_email, to = 'Registration link', 'admin@ice.com', email
-        text_content = ''
-        html_content = render_to_string('register/signup_email.html',
-                                        context={'name': name,
-                                                 'protocol': 'http',
-                                                 'domain': 'localhost:8000',
-                                                 'email': email,
-                                                 'user_type': user_type})
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
-        return None
 
 
 class RegisterUser (View):

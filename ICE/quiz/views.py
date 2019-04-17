@@ -10,6 +10,10 @@ from .forms import QuizForm
 
 from django.views.generic import View
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
+
 
 # Create your views here.
 class QuizAdd(View):
@@ -76,8 +80,16 @@ class QuizTake(View):
             course_last_module = Module.objects.filter(course=quiz_bank.course).order_by('-position')[0]
             if course_last_module == quiz_bank.module:
 
+                # The last course completed credits + CECU for this course
+                cumulative_credits = CourseCompletion.objects.filter(learner=learner).order_by('date_completed')[0].course.credit_units + quiz_bank.course.credit_units
+
                 # creating CourseCompletion object to store course completion (surprise, surprise)
-                CourseCompletion.objects.create(course=quiz_bank.course, learner=learner)
+                CourseCompletion.objects.create(course=quiz_bank.course, learner=learner,
+                                                cumulative_credits=cumulative_credits)
+                send_email(learner.email,
+                           learner.first_name + ' ' + learner.last_name,
+                           'Course Completed',
+                           'quiz/course_completed_email.html', quiz_bank.course)
                 course_completed = True
             learner.save()
             return render(request, "quiz/quiz_result.html", context={'result': result_percent,
@@ -86,3 +98,16 @@ class QuizTake(View):
         fail = True        
         return render(request, "quiz/quiz_result.html", context={'fail': fail,
                                                                  'course': quiz_bank.course})
+
+
+def send_email(email, name, subject, email_template, course):
+    subject, from_email, to = subject, 'admin@ice.com', email
+    text_content = ''
+    html_content = render_to_string(email_template,
+                                    context={'name': name,
+                                             'course': course,
+                                             'email': email})
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+    return None

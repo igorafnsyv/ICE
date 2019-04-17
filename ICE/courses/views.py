@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Course, Module, Component, Learner, Instructor, Category
+from .models import Course, Module, Component, Learner, Instructor, Category, CourseCompletion
 from django.contrib.auth.models import Group, User
 from quiz.models import QuizBank
 from django.http import HttpResponse
@@ -25,6 +25,17 @@ def courses_list(request):
     else:
         courses = Learner.objects.get(staff_id=request.user.learner.staff_id).courses.all()
         return render(request, 'courses/learner_course_list.html', context={'courses': courses})
+
+
+def completed_courses_list(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    completion_records = CourseCompletion.objects.filter(learner=request.user.learner)
+    total_credits = 0
+    for completion in completion_records:
+        total_credits += completion.course.credit_units
+    return render(request, 'courses/completed_courses_list.html', context={'completion_records': completion_records,
+                                                                           'total_credits': total_credits})
 
 
 # returns all courses available for enrollment
@@ -82,10 +93,10 @@ def study_course(request, course_id):
                                                                  'learner': learner})
 
 
-def study_module(request, module_id):
+def study_module(request, id):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
-    module = Module.objects.get(id__iexact=module_id)
+    module = Module.objects.get(id__iexact=id)
     components = Component.objects.filter(module=module).order_by('position')
     quiz_bank = QuizBank.objects.get(module=module)
 
@@ -184,7 +195,7 @@ class ModuleCreate (View):
 
     def get(self, request, course_id):
         if request.user.is_anonymous:
-            redirect('/accounts/login/')
+            return redirect('/accounts/login/')
         course = Course.objects.get(id=course_id)
         form = ModuleForm()
         component_form = ComponentForm()
@@ -235,7 +246,7 @@ class ComponentCreate(View):
     # todo identify instructor who created component
     def get(self, request, module_id):
         if request.user.is_anonymous:
-            redirect('/accounts/login/')
+            return redirect('/accounts/login/')
         component_form = ComponentForm()
         module = Module.objects.get(id=module_id)
         course = module.course

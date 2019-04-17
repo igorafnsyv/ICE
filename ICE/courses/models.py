@@ -62,6 +62,7 @@ class CourseCompletion(models.Model):
     learner = models.ForeignKey(Learner, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     date_completed = models.DateTimeField(auto_now_add=True)
+    cumulative_credits = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.learner.first_name + ' ' + self.learner.last_name + ' ' + self.course.title
