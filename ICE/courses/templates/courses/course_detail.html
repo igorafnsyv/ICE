@@ -17,6 +17,7 @@
 <h1>{{course.title}}</h1>
 {#{course.id}#}
 
+<a href = "{% url 'component_upload_url' course.id %}"><button>Add Component to Course</button></a>
 
   {% for module in modules%}
     <div id="moduletitle"> <h3> Module {{module.position}}: {{module.title}}</h3> </div>

@@ -20,4 +20,9 @@ class ComponentForm(forms.ModelForm):
     class Meta:
         model = Component
         fields = ['module', 'id']
- #   title = forms.IntegerField(widget=forms.HiddenInput)
+
+
+class ComponentUploadForm(forms.ModelForm):
+    class Meta:
+        model = Component
+        fields = ['title', 'body', 'image']

@@ -1,6 +1,8 @@
 # pattern match urls here
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('list/', views.courses_list, name='course_list_url'),
@@ -16,5 +18,11 @@ urlpatterns = [
     path('enroll/<str:course_id>/', views.course_enroll, name='enroll_in_course_url'),
     path('component_free/<str:component_id>', views.component_remove_module, name='component_remove_module_url'),
     path('completed_courses/', views.completed_courses_list, name='completed_courses_list_url'),
+    path('upload_component/<str:course_id>', views.ComponentUpload.as_view(), name='component_upload_url'),
 
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

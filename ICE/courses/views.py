@@ -6,7 +6,7 @@ from django.http import HttpResponse
 
 from django.views.generic import View
 
-from .forms import ModuleForm, ComponentForm, CourseForm
+from .forms import ModuleForm, ComponentForm, CourseForm, ComponentUploadForm
 # Create your views here.
 
 
@@ -239,7 +239,31 @@ class ModuleCreate (View):
                     quiz_bank.module = new_module
                     quiz_bank.save()
             return redirect(course)
-              
+
+
+# use this class to upload a new component
+class ComponentUpload (View):
+    def get(self, request, course_id):
+        if request.user.is_anonymous:
+            return redirect('/accounts/login/')
+        component_upload_form = ComponentUploadForm()
+        return render(request, 'courses/upload_new_component.html', context={'form': component_upload_form,
+                                                                             'course_id': course_id})
+
+    def post(self, request, course_id):
+        course = Course.objects.filter(id=course_id)[0]
+        if request.POST['body']:
+            form = ComponentUploadForm(request.POST)
+
+        else:
+            form = ComponentUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.course = course
+            obj.instructor = request.user.instructor
+            obj.save()
+        return redirect(course)
+
 
 class ComponentCreate(View):
 
