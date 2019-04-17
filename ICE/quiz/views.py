@@ -15,6 +15,8 @@ from django.views.generic import View
 class QuizAdd(View):
 
     def get(self, request, id):
+        if request.user.is_anonymous:
+            redirect('/accounts/login/')
         module = Module.objects.get(id__iexact=id)
         quiz_banks = QuizBank.objects.filter(module=None)
         quiz_bank_form = QuizForm()
@@ -40,6 +42,8 @@ class QuizAdd(View):
 class QuizTake(View):
 
     def get(self, request, quiz_bank_id):
+        if request.user.is_anonymous:
+            return redirect('/accounts/login')
         quiz_bank = QuizBank.objects.get(id=quiz_bank_id)
         print(quiz_bank)
         questions = list(Question.objects.filter(quizBank=quiz_bank))
@@ -65,19 +69,20 @@ class QuizTake(View):
 
         if result / quiz_bank.required_questions_num >= pass_rate / 100:
 
-                learner = request.user.learner
-                learner.completed_modules.add(quiz_bank.module)
+            learner = request.user.learner
+            learner.completed_modules.add(quiz_bank.module)
 
-                result_percent = result / quiz_bank.required_questions_num * 100
-                course_last_module = Module.objects.filter(course=quiz_bank.course).order_by('-position')[0]
-                if course_last_module == quiz_bank.module:
-                    #learner.completed_courses.add(quiz_bank.course)
-                    CourseCompletion.objects.create(course=quiz_bank.course, learner=learner)
-                    course_completed = True
-                learner.save()
-                return render(request, "quiz/quiz_result.html", context={'result': result_percent,
-                                                                         'course': quiz_bank.course,
-                                                                         'course_completed': course_completed})
+            result_percent = result / quiz_bank.required_questions_num * 100
+            course_last_module = Module.objects.filter(course=quiz_bank.course).order_by('-position')[0]
+            if course_last_module == quiz_bank.module:
+
+                # creating CourseCompletion object to store course completion (surprise, surprise)
+                CourseCompletion.objects.create(course=quiz_bank.course, learner=learner)
+                course_completed = True
+            learner.save()
+            return render(request, "quiz/quiz_result.html", context={'result': result_percent,
+                                                                     'course': quiz_bank.course,
+                                                                     'course_completed': course_completed})
         fail = True        
         return render(request, "quiz/quiz_result.html", context={'fail': fail,
                                                                  'course': quiz_bank.course})

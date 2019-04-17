@@ -14,6 +14,13 @@ import requests
 from django.http import HttpResponse
 
 
+def verify_username(request, username):
+    user_name_exists = User.objects.filter(username=username).exists()
+    if user_name_exists:
+        return HttpResponse('False')
+    return HttpResponse('True')
+
+
 class SignUp (View):
 
     def get(self, request):
@@ -28,23 +35,27 @@ class SignUp (View):
             name = request.POST['first_name'] + ' ' + request.POST['last_name']
             email = request.POST['email']
             user_type = 'instructor'
-            Instructor.objects.create(email=email,
-                                      first_name=request.POST['first_name'],
-                                      last_name=request.POST['last_name'])
+
+            # todo Check if exists, if true -> do not create
+            if not Instructor.objects.filter(email=email):
+                Instructor.objects.create(email=email,
+                                          first_name=request.POST['first_name'],
+                                          last_name=request.POST['last_name'])
 
         # if user is not admin
         if not request.user.is_superuser:
             req = requests.get("https://gibice-hrserver.herokuapp.com/info/" + request.POST['id'])
             if req.text == 'Invalid staff ID':
                 return HttpResponse("<h1>Invalid Staff ID</h1>")
+
             email = req.json()['email']
-            Learner.objects.create(first_name=req.json()['first_name'],
-                                   last_name=req.json()['last_name'],
-                                   staff_id=req.json()['id'],
-                                   email=email)
             name = req.json()['first_name'] + ' ' + req.json()['last_name']
             user_type = 'learner'
-
+            if not Learner.objects.filter(email=email):
+                Learner.objects.create(first_name=req.json()['first_name'],
+                                       last_name=req.json()['last_name'],
+                                       staff_id=req.json()['id'],
+                                       email=email)
         # email content
         self.send_email(email, name, user_type)
         return render(request, 'register/signup_success.html', context={})
@@ -72,6 +83,9 @@ class RegisterUser (View):
                                                                             'user_type': type})
 
     def post(self, request, email, type):
+        if not Group.objects.all().exists():
+            Group.objects.create(name='Learners')
+            Group.objects.create(name='Instructors')
         if int(type) == 1:
             learner = Learner.objects.get(email=email)
             first_name = learner.first_name

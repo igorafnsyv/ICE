@@ -9,9 +9,6 @@ from django.views.generic import View
 from .forms import ModuleForm, ComponentForm, CourseForm
 # Create your views here.
 
-# Course.objects.exclude(learner=learner)
-# course[0].learner_set.all() to get all learners in the course
-
 
 # since it is landing page, verify user type, depending on this, redirect users
 # admin to admin and others to the func
@@ -21,13 +18,12 @@ def courses_list(request):
     if request.user.is_superuser:
         return render(request, 'courses/admin_start_page.html', context={})
 
-    user = User.objects.get(username=request.user)
     if str(request.user.groups.all()[0]) == 'Instructors':
         # has to return all courses that were created by this particular Instructor
-        courses = Course.objects.filter(instructor=user.instructor)
+        courses = Course.objects.filter(instructor=request.user.instructor)
         return render(request, 'courses/courses_list.html', context={'courses': courses})
     else:
-        courses = Learner.objects.get(staff_id=user.learner.staff_id).courses.all()
+        courses = Learner.objects.get(staff_id=request.user.learner.staff_id).courses.all()
         return render(request, 'courses/learner_course_list.html', context={'courses': courses})
 
 
@@ -35,13 +31,13 @@ def courses_list(request):
 def all_courses(request):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
-    this_learner = Learner.objects.get(user= request.user)
+    this_learner = request.user.learner
     courses_can_enroll = Course.objects.filter(status=1).exclude(learner=this_learner)
     categories = Category.objects.all()
     selected_category = ''
 
-    # if user has selected category, extract it and shoe courses from that category
-    if request.GET:
+    # if user has selected category, extract it and show courses from that category
+    if request.GET and request.GET['category']:
         selected_category = Category.objects.get(title=request.GET['category'])
         courses_can_enroll = courses_can_enroll.filter(category=selected_category)
 
@@ -52,19 +48,23 @@ def all_courses(request):
 
 def course_enroll(request, course_id):
 
-    # Where do we redirect after enrollment? To the list of courses learner enrolled or continue enrollment?
+    # todo where to redirect user after successful enrollment?
+    # todo fix redirection to course
+    # To the list of courses learner enrolled or continue enrollment?
     if request.user.is_anonymous:
         return redirect('/accounts/login')
     this_learner = request.user.learner
     course = Course.objects.get(id=course_id)
     this_learner.courses.add(course)
     this_learner.save()
-    return redirect(course)
+    return redirect('course_list_url')
 
 
-def study_course(request, id):
-    # merge it later with course_detail
-    course = Course.objects.get(id__iexact=id)
+def study_course(request, course_id):
+    # todo merge with course detail
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    course = Course.objects.get(id__iexact=course_id)
     modules = Module.objects.filter(course=course)
     print(modules)
     availability = True
@@ -82,8 +82,10 @@ def study_course(request, id):
                                                                  'learner': learner})
 
 
-def study_module (request, id):
-    module = Module.objects.get(id__iexact=id)
+def study_module(request, module_id):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    module = Module.objects.get(id__iexact=module_id)
     components = Component.objects.filter(module=module).order_by('position')
     quiz_bank = QuizBank.objects.get(module=module)
 
@@ -94,7 +96,10 @@ def study_module (request, id):
                                                                  'quiz_taken': quiz_taken})
 
 
-def course_detail(request, id):   # shows details of the particular course
+# shows details of the particular course
+def course_detail(request, id):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
     course = Course.objects.get(id__iexact=id)
     modules = Module.objects.filter(course=course).order_by('position')
     components = []
@@ -113,11 +118,14 @@ def course_detail(request, id):   # shows details of the particular course
 
 class CourseCreate(View):
     def get(self, request):
+        if request.user.is_anonymous:
+            return redirect('/accounts/login')
         form = CourseForm()
         instructor = request.user.instructor
         return render(request, 'courses/course_create.html', context={'form': form,
                                                                       'instructor': instructor})
 
+    # todo identify instructor by id rather than name and surname
     def post (self, request):
         bound_course = CourseForm(request.POST)
         instructor = Instructor.objects.get(first_name=request.POST['instructor_first_name'],
@@ -130,9 +138,11 @@ class CourseCreate(View):
         return redirect(courses[len(courses) - 1])
 
 
-# can be merged with component delete
-def module_delete(request, id):
-    module = Module.objects.get(id__iexact=id)
+# todo merge with component delete
+def module_delete(request, module_id):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    module = Module.objects.get(id__iexact=module_id)
     course = module.course
     removed_position = module.position
     all_modules = Module.objects.filter(course=course)
@@ -144,8 +154,10 @@ def module_delete(request, id):
     return redirect(course)
 
 
-def component_delete(request, id):
-    component = Component.objects.get(id__iexact=id)
+def component_delete(request, component_id):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    component = Component.objects.get(id__iexact=component_id)
     module = component.module
     course = module.course
     removed_position = component.position
@@ -158,13 +170,22 @@ def component_delete(request, id):
     return redirect(course)
 
 
+def component_remove_module(request, component_id):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    component = Component.objects.get(id=component_id)
+    component.module = None
+    component.save()
+    return redirect(component.course)
 # class based view to override Post function
+
+
 class ModuleCreate (View):
 
-    def get(self, request, id):
+    def get(self, request, course_id):
         if request.user.is_anonymous:
             redirect('/accounts/login/')
-        course = Course.objects.get(id=id)
+        course = Course.objects.get(id=course_id)
         form = ModuleForm()
         component_form = ComponentForm()
         components = Component.objects.filter(course=course, module=None)
@@ -175,9 +196,9 @@ class ModuleCreate (View):
                                                                       'components': components,
                                                                       'quiz_banks': quiz_banks})
 
-    def post(self, request, id):
+    def post(self, request, course_id):
         instructor = request.user.instructor
-        course = Course.objects.get(id__iexact=id)
+        course = Course.objects.get(id__iexact=course_id)
         bound_module = ModuleForm(request.POST)
         if bound_module.is_valid():
             obj = bound_module.save(commit=False)
@@ -210,20 +231,22 @@ class ModuleCreate (View):
               
 
 class ComponentCreate(View):
-    # def get #should be used to create an interface for component creation
-    # need to identify instructor who created component
-    def get(self, request, id):
+
+    # todo identify instructor who created component
+    def get(self, request, module_id):
+        if request.user.is_anonymous:
+            redirect('/accounts/login/')
         component_form = ComponentForm()
-        module = Module.objects.get(id=id)
+        module = Module.objects.get(id=module_id)
         course = module.course
         components = Component.objects.filter(course=course, module=None)
         return render(request, 'courses/add_existing_component.html', context={'form': component_form,
                                                                                'module': module,
                                                                                'components': components})
 
-    def post(self, request, id):
+    def post(self, request, module_id):
         # might result in a case that component is associated with module but not with course
-        module = Module.objects.get(id__iexact=id)
+        module = Module.objects.get(id__iexact=module_id)
         course = module.course
 
         # traverse dictionary as key value pair
@@ -240,3 +263,4 @@ class ComponentCreate(View):
                 component.position = current_position
                 component.save()
         return redirect(course)
+

@@ -27,6 +27,7 @@
 <br>
     {% for component in module.components%}
         <a href ="{% url 'delete_component_url' component.id %}"><button>Delete Component</button></a>
+        <a href ="{% url 'component_remove_module_url' component.id %}"><button>Remove from Module</button></a>
       {% if component.image %}
         <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
       {%endif%}

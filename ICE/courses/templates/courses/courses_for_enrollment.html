@@ -16,6 +16,7 @@
 <!--Would be super nice to use AJAX here, but no need anymore I guess-->
 <form method="get" action="">
     <select name="category">
+    <option value=""> All </option>
     {% for option in categories %}
         <option value ="{{ option }}">{{ option }}</option>
         <br>
@@ -26,7 +27,7 @@
 
 <!--Check if any category has been selected-->
 {% if selected_category %}
-    <h3>Course from {{ selected_category }} category</h3>
+    <h3>Course(s) from {{ selected_category }} category</h3>
 {% else %}
     <h3>Or view all courses as a list</h3>
 {% endif %}
