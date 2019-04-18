@@ -30,6 +30,7 @@
             {%for component in components%}
                 <input type = "checkbox" name = "component{{component.id}}" value = "{{component.id}}"> {{component}}
                 <br>
+                Position: <input type = "number" name = "position{{ component.id }}">
                 {% if component.image %}
                     <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
                     <br>

@@ -226,7 +226,7 @@ class ModuleCreate (View):
                 obj.position = position + 1
             else:
                 insertion_position = request.POST['position']
-                if insertion_position <= 0:
+                if int(insertion_position) <= 0:
                     insertion_position = 1
                 obj.position = insertion_position
                 existing_modules = Module.objects.filter(course=course)
@@ -241,8 +241,15 @@ class ModuleCreate (View):
                 if 'component' in key:
                     component = Component.objects.get(id__iexact=value)
                     component.module = new_module
+
+                    # Handles the case component position is not specified
                     component.position = component_position
                     component_position += 1
+
+                    # Handles the case if position was specified
+                    if request.POST['position' + str(component.id)]:
+                        component.position = request.POST['position' + str(component.id)]
+                        component_position = component_position + 1
                     component.save()
                 if 'quiz' in key:
                     quiz_bank = QuizBank.objects.get(id__iexact=value)
