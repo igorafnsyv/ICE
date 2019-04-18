@@ -72,7 +72,7 @@ class Module(models.Model):
 
     title = models.CharField(max_length=150, db_index=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null = True, blank = True)
-    position = models.IntegerField(db_index = True, null = True, blank = True)
+    position = models.IntegerField(db_index=True, null=True, blank=True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
 
     def get_absolute_url(self):

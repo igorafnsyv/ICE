@@ -217,18 +217,28 @@ class ModuleCreate (View):
             obj.instructor = instructor
 
             # if Position is not specified by tutor
-            if 'position' not in request.POST:
+            if not request.POST['position']:
 
                 # get total number of positions
                 position = Module.objects.filter(course=course).count()
 
                 # position = append to the ends
                 obj.position = position + 1
+            else:
+                insertion_position = request.POST['position']
+                if insertion_position <= 0:
+                    insertion_position = 1
+                obj.position = insertion_position
+                existing_modules = Module.objects.filter(course=course)
+                for existing_module in existing_modules:
+                    if existing_module.position >= int(insertion_position):
+                        existing_module.position += 1
+                        existing_module.save()
             obj.save()
             new_module = Module.objects.get(id=obj.id)
             component_position = 1
             for key, value in request.POST.items():
-                if "component" in key:
+                if 'component' in key:
                     component = Component.objects.get(id__iexact=value)
                     component.module = new_module
                     component.position = component_position
@@ -271,7 +281,6 @@ class ComponentCreate(View):
     def get(self, request, module_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
-        #component_form = ComponentForm()
         module = Module.objects.get(id=module_id)
         course = module.course
         components = Component.objects.filter(course=course, module=None)
@@ -295,6 +304,8 @@ class ComponentCreate(View):
             if 'position' in key:
                 if value:
                     insertion_position = value
+                    if insertion_position <= 0:
+                        insertion_position = 1
                     module_components = Component.objects.filter(module=module)
                     for existing_component in module_components:
                         if insertion_position >= insertion_position:
