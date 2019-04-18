@@ -271,12 +271,11 @@ class ComponentCreate(View):
     def get(self, request, module_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
-        component_form = ComponentForm()
+        #component_form = ComponentForm()
         module = Module.objects.get(id=module_id)
         course = module.course
         components = Component.objects.filter(course=course, module=None)
-        return render(request, 'courses/add_existing_component.html', context={'form': component_form,
-                                                                               'module': module,
+        return render(request, 'courses/add_existing_component.html', context={'module': module,
                                                                                'components': components})
 
     def post(self, request, module_id):
@@ -285,17 +284,28 @@ class ComponentCreate(View):
         course = module.course
 
         # traverse dictionary as key value pair
-        for key, componentID in request.POST.items():
+        for key, value in request.POST.items():
 
             # if string 'component' is found in key
             if "component" in key:
-                component = Component.objects.get(id__iexact=componentID)
+                component = Component.objects.get(id__iexact=value)
                 component.module = module
-                current_position = 1
-                previous_components = Component.objects.filter(module=module).order_by('-position')
-                if len(previous_components) > 1:
-                    current_position = previous_components[0].position + 1
-                component.position = current_position
+
+            # we are dealing with component positioning now
+            if 'position' in key:
+                if value:
+                    insertion_position = value
+                    module_components = Component.objects.filter(module=module)
+                    for existing_component in module_components:
+                        if insertion_position >= insertion_position:
+                            existing_component.position += 1
+                            existing_component.save()
+                    component.position = insertion_position
+
+                # if position is not specified, default action
+                if not value:
+                    previous_component_position = Component.objects.filter(module=module).count()
+                    component.position = previous_component_position + 1
                 component.save()
         return redirect(course)
 

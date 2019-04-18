@@ -80,9 +80,11 @@ class QuizTake(View):
             course_last_module = Module.objects.filter(course=quiz_bank.course).order_by('-position')[0]
             if course_last_module == quiz_bank.module:
 
-                # The last course completed credits + CECU for this course
-                cumulative_credits = CourseCompletion.objects.filter(learner=learner).order_by('date_completed')[0].course.credit_units + quiz_bank.course.credit_units
-
+                if len(CourseCompletion.objects.filter(learner=learner)) > 0:
+                    # The last course completed credits + CECU for this course
+                    cumulative_credits = CourseCompletion.objects.filter(learner=learner).order_by('date_completed')[0].course.credit_units + quiz_bank.course.credit_units
+                else:
+                    cumulative_credits = quiz_bank.course.credit_units
                 # creating CourseCompletion object to store course completion (surprise, surprise)
                 CourseCompletion.objects.create(course=quiz_bank.course, learner=learner,
                                                 cumulative_credits=cumulative_credits)
