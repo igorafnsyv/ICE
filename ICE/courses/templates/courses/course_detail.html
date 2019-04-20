@@ -27,14 +27,16 @@
 <br>
 <br>
     {% for component in module.components%}
-        <a href ="{% url 'delete_component_url' component.id %}"><button>Delete Component</button></a>
-        <a href ="{% url 'component_remove_module_url' component.id %}"><button>Remove from Module</button></a>
-      {% if component.image %}
-        <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
-      {%endif%}
-      {% if component.body %} <td>
-        <div id="componentbody"><p>{{ component.body }}</p></div>
-      {%endif%}
+        <div id="component{{ component.id }}">
+            <button onclick="deleteComponent({{ component.id }});">Delete Component</button>
+            <button onclick="removeComponent({{ component.id }});">Remove from Module</button>
+          {% if component.image %}
+            <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
+          {%endif%}
+          {% if component.body %} <td>
+            <div id="componentbody" ><p>{{ component.body }}</p></div>
+          {%endif%}
+        </div>
     {%endfor%}
   <!--  <a href = "{%url 'add_component_url' module.id %} ">Add Component</a> -->
   <br>
@@ -59,17 +61,10 @@
 
 
 <br>
-<button id = "new">Add module</button>
+<button id = "new" onclick="createModule({{ course.id }});">Add module</button>
 <br>
 <br>
 <br>
 
 
-<script>
-      var newModuleButton  = document.getElementById('new');
-      newModuleButton.addEventListener("click", function() {
-
-          document.location.href = "{% url 'create_module_url' course.id %}";
-      });
-
-</script>
+<script src="{% static 'javascript/manageCourseContent.js' %}"></script>
