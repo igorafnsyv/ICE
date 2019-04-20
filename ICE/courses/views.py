@@ -3,6 +3,7 @@ from .models import Course, Module, Component, Learner, Instructor, Category, Co
 from django.contrib.auth.models import Group, User
 from quiz.models import QuizBank
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from django.views.generic import View
 
@@ -258,6 +259,28 @@ class ModuleCreate (View):
             return redirect(course)
 
 
+class ManageModule(View):
+    def get(self, request, module_id):
+        if request.user.is_anonymous:
+            return redirect('/accounts/login/')
+        all_components = Component.objects.filter(module=Module.objects.get(id=module_id))
+        return render(request, 'courses/manage_module.html', context={'all_components': all_components})
+
+    @csrf_exempt
+    def post(self, request, module_id):
+        print()
+        print()
+        print(request)
+        return HttpResponse("saved")
+
+
+def manage_module(request, component_id, position):
+    current_component = Component.objects.get(id=component_id)
+    current_component.position = position
+    current_component.save()
+    return HttpResponse(None)
+
+
 # use this class to upload a new component
 class ComponentUpload (View):
     def get(self, request, course_id):
@@ -311,7 +334,7 @@ class ComponentCreate(View):
             if 'position' in key:
                 if value:
                     insertion_position = value
-                    if insertion_position <= 0:
+                    if int(insertion_position) <= 0:
                         insertion_position = 1
                     module_components = Component.objects.filter(module=module)
                     for existing_component in module_components:
