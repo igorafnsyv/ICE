@@ -263,18 +263,19 @@ class ManageModule(View):
     def get(self, request, module_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
-        all_components = Component.objects.filter(module=Module.objects.get(id=module_id))
+        all_components = Component.objects.filter(module=Module.objects.get(id=module_id)).order_by('position')
         return render(request, 'courses/manage_module.html', context={'all_components': all_components})
 
     @csrf_exempt
     def post(self, request, module_id):
-        print()
-        print()
-        print(request)
-        return HttpResponse("saved")
+        module = Module.objects.get(id=module_id)
+        if request.POST['title']:
+            module.title = request.POST['title']
+            module.save()
+        return redirect(module.course)
 
 
-def manage_module(request, component_id, position):
+def apply_component_position(request, component_id, position):
     current_component = Component.objects.get(id=component_id)
     current_component.position = position
     current_component.save()
