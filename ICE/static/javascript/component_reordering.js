@@ -22,6 +22,7 @@ function isBefore(elementOne, elementTwo) {
 
 }
 function savePosition() {
+    let element_type = document.getElementById("element_type");
     let elements = document.getElementsByTagName('li');
     for (var i = 0; i < elements.length; i++) {
       let xhttp = new XMLHttpRequest();
@@ -30,7 +31,7 @@ function savePosition() {
             console.log("sent");
         }
       };
-      xhttp.open("GET", "/courses/apply_component_position/" + elements[i].id +'/' + i, false);
+      xhttp.open("GET", "/courses/apply_element_position/" + elements[i].id +'/' + i +'/' + element_type.value +'/' , false);
       xhttp.send();
     }
     return true;

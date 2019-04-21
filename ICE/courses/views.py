@@ -3,8 +3,6 @@ from .models import Course, Module, Component, Learner, Instructor, Category, Co
 from django.contrib.auth.models import Group, User
 from quiz.models import QuizBank
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-
 from django.views.generic import View
 
 from .forms import ModuleForm, ComponentForm, CourseForm, ComponentUploadForm
@@ -266,7 +264,6 @@ class ManageModule(View):
         all_components = Component.objects.filter(module=Module.objects.get(id=module_id)).order_by('position')
         return render(request, 'courses/manage_module.html', context={'all_components': all_components})
 
-    @csrf_exempt
     def post(self, request, module_id):
         module = Module.objects.get(id=module_id)
         if request.POST['title']:
@@ -275,10 +272,31 @@ class ManageModule(View):
         return redirect(module.course)
 
 
-def apply_component_position(request, component_id, position):
-    current_component = Component.objects.get(id=component_id)
-    current_component.position = position
-    current_component.save()
+class ManageCourse(View):
+    def get(self, request, course_id):
+        if request.user.is_anonymous:
+            return redirect('/accounts/login/')
+        all_modules = Module.objects.filter(course=Course.objects.get(id=course_id)).order_by('position')
+
+        # todo rename manage_module template to manage_content
+        return render(request, 'courses/manage_module.html', context={'all_components': all_modules,
+                                                                      'manage_course': True})
+
+    def post(self, request, course_id):
+        course = Course.objects.get(id=course_id)
+        if request.POST['title']:
+            course.title = request.POST['title']
+            course.save()
+        return redirect(course)
+
+
+def apply_element_position(request, component_id, position, element_type):
+    if element_type == str(1):
+        current_element = Component.objects.get(id=component_id)
+    else:
+        current_element = Module.objects.get(id=component_id)
+    current_element.position = int(position) + 1
+    current_element.save()
     return HttpResponse(None)
 
 

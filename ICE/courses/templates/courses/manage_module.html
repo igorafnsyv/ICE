@@ -1,12 +1,26 @@
-<h2>Modify Module</h2>
+
+{% if manage_course %}
+    <h2>Modify Course</h2>
+{% else %}
+    <h2>Modify Module</h2>
+{% endif %}
 
 {% load static %}
 <script src ="{% static 'javascript/component_reordering.js' %}"></script>
-
+{% if manage_course %}
+    <input id="element_type" type="hidden" value="2">
+{% else %}
+    <input id="element_type" type="hidden" value="1">
+{% endif %}
 <form action="" method="post">
     {% csrf_token %}
     Change Title: <input type="text", name="title">
     <br>
+    {% if manage_course %}
+        <h3>Drag and Drop Module names to reorder them:</h3>
+    {% else %}
+        <h3>Drag and Drop Component names to reorder them:</h3>
+    {% endif %}
     <ul>
         {% for component in all_components %}
             <!--If you change li here, change also in component_reordering.js-->
