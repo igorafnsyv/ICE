@@ -1,7 +1,9 @@
 <head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
+<script src="{% static 'javascript/module_create.js' %}"></script>
 <title> Create Module </title>
+<input id="courseId"type="hidden" value="{{ course.id }}">
 <div id = "header">
 <a href = "/accounts/logout/"><h2 id="logout"> Logout</h2></a>
 <h2>  Welcome to <span> I.C.E. </span></h2>
@@ -25,12 +27,14 @@
             {{field}}
         {% endfor %}
         <br>
+        <h3>Components selected by you</h3>
+        <ul id="selectedComponents">
+        </ul>
         {% if components %}
             <h4>Please, select components you would like to add to this module</h4>
             {%for component in components%}
-                <input type = "checkbox" name = "component{{component.id}}" value = "{{component.id}}"> {{component}}
+                <input id="{{ component.id }}" type="checkbox" name = "component{{component.id}}" value = "{{component.title}}" onchange="addSelected({{ component.id }});"> {{component}}
                 <br>
-                Position: <input type = "number" name = "position{{ component.id }}">
                 {% if component.image %}
                     <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
                     <br>
@@ -51,6 +55,6 @@
         {% endif %}
         <input type = "hidden" value = "{{courseID}}">
         <br>
-        <button type = "submit">Create Module</button>
+        <button type = "submit" onclick="return saveOrder();">Create Module</button>
 
 </form>

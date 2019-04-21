@@ -190,6 +190,19 @@ def component_remove_module(request, component_id):
 # class based view to override Post function
 
 
+def new_module_add_components(request, component_id, position, course_id):
+    if int(position) == 0:
+        course = Course.objects.get(id=course_id)
+
+        Module.objects.create(title='Igor is bad at AJAX', instructor=course.instructor, course=course, position=0)
+    new_module = Module.objects.all()[len(Module.objects.all()) - 1]
+    current_component = Component.objects.get(id=component_id)
+    current_component.position = int(position) + 1
+    current_component.module = new_module
+    current_component.save()
+    return HttpResponse("ok")
+
+
 class ModuleCreate (View):
 
     def get(self, request, course_id):
@@ -207,54 +220,35 @@ class ModuleCreate (View):
                                                                       'quiz_banks': quiz_banks})
 
     def post(self, request, course_id):
-        instructor = request.user.instructor
         course = Course.objects.get(id__iexact=course_id)
-        bound_module = ModuleForm(request.POST)
-        if bound_module.is_valid():
-            obj = bound_module.save(commit=False)
-            obj.course = course
-            obj.instructor = instructor
+        module = Module.objects.get(title='Igor is bad at AJAX')
+        module.title = request.POST['title']
+        if not request.POST['position']:
 
-            # if Position is not specified by tutor
-            if not request.POST['position']:
+            # get total number of positions
+            position = Module.objects.filter(course=course).count()
 
-                # get total number of positions
-                position = Module.objects.filter(course=course).count()
+            # position = append to the ends
+            module.position = position
+        else:
+            insertion_position = request.POST['position']
+            if int(insertion_position) <= 0:
+                insertion_position = 1
+            module.position = insertion_position
+            existing_modules = Module.objects.filter(course=course)
+            for existing_module in existing_modules:
+                if existing_module.position >= int(insertion_position):
+                    existing_module.position += 1
+                    existing_module.save()
+        module.save()
+        new_module = module
 
-                # position = append to the ends
-                obj.position = position + 1
-            else:
-                insertion_position = request.POST['position']
-                if int(insertion_position) <= 0:
-                    insertion_position = 1
-                obj.position = insertion_position
-                existing_modules = Module.objects.filter(course=course)
-                for existing_module in existing_modules:
-                    if existing_module.position >= int(insertion_position):
-                        existing_module.position += 1
-                        existing_module.save()
-            obj.save()
-            new_module = Module.objects.get(id=obj.id)
-            component_position = 1
-            for key, value in request.POST.items():
-                if 'component' in key:
-                    component = Component.objects.get(id__iexact=value)
-                    component.module = new_module
-
-                    # Handles the case component position is not specified
-                    component.position = component_position
-                    component_position += 1
-
-                    # Handles the case if position was specified
-                    if request.POST['position' + str(component.id)]:
-                        component.position = request.POST['position' + str(component.id)]
-                        component_position = component_position + 1
-                    component.save()
-                if 'quiz' in key:
-                    quiz_bank = QuizBank.objects.get(id__iexact=value)
-                    quiz_bank.module = new_module
-                    quiz_bank.save()
-            return redirect(course)
+        for key, value in request.POST.items():
+            if 'quiz' in key:
+                quiz_bank = QuizBank.objects.get(id__iexact=value)
+                quiz_bank.module = new_module
+                quiz_bank.save()
+        return redirect(course)
 
 
 class ManageModule(View):

@@ -1,11 +1,3 @@
- function createModule(courseID) {
-     var newModuleButton = document.getElementById('new');
-     newModuleButton.addEventListener("click", function () {
-
-         document.location.href = "/courses/create_module/" + courseID;
-
-     });
- }
 function deleteComponent(componentID) {
       let xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange=function() {

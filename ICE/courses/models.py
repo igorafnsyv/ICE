@@ -5,8 +5,6 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
-# Store Categories?
-
 class Category(models.Model):
     title = models.CharField(max_length=50, db_index= True, blank=True, null=True)
 
@@ -42,8 +40,7 @@ class Course(models.Model):
     title = models.CharField(max_length=150, db_index=True)
     description = models.TextField(blank=False)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
-    # current_learner = models.ManyToManyField(User, blank=True)
-    # current_Learners -> learners who are taking course now
+    # to find current learners -> learners - course_completions
     credit_units = models.IntegerField(db_index=True, null=True, blank=True)
 
     # value 1 if course is opened, 0 if closed

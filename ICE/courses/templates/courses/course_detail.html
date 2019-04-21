@@ -61,7 +61,7 @@
 
 
 <br>
-<button id = "new" onclick="createModule({{ course.id }});">Add module</button>
+<a href="{% url 'create_module_url' course.id %}"><button id = "new">Add module</button></a>
 <br>
 <br>
 <br>
