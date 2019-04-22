@@ -1,6 +1,18 @@
-<h1>Please, provide component's data</h1>
+<head>
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
+<script src="{% static 'javascript/module_create.js' %}"></script>
+<title> Create Module </title>
+<input id="courseId"type="hidden" value="{{ course.id }}">
+<div id = "header">
+<a href = "/accounts/logout/"><h2 id="logout"> Logout</h2></a>
+<h2>  Welcome to <span> I.C.E. </span></h2>
+</div>
+</head>
 
-<h3>Select either text component or image component</h3>
+<h1>Create Component</h1>
+
+<h3>Select text or image component</h3>
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% for field in form %}
@@ -9,5 +21,7 @@
         {{ field }}
         <br>
     {% endfor %}
+     <br>
+      <br>
 <button type="submit">Submit</button>
 </form>

@@ -17,8 +17,9 @@
 </nav>
 
 {{courseID}}
-<br>
 
+<h1> Create Module </h1>
+<br>
 <form action ="{% url 'create_module_url' course.id %}" method = "post">
         
         {% csrf_token %}
@@ -31,7 +32,7 @@
         <ul id="selectedComponents">
         </ul>
         {% if components %}
-            <h4>Please, select components you would like to add to this module</h4>
+            <h4>Select components you would like to add to this module</h4>
             {%for component in components%}
                 <input id="{{ component.id }}" type="checkbox" name = "component{{component.id}}" value = "{{component.title}}" onchange="addSelected({{ component.id }});"> {{component}}
                 <br>
