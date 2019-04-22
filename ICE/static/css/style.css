@@ -306,6 +306,13 @@ text-align: center;
   background-color: #3e8e41;
 }
 
+#deletebutton{
+ display: inline;
+}
+
+#removebutton{
+ display: inline;
+}
 
 
 

@@ -20,6 +20,7 @@
 {#{course.id}#}
 
 <a href = "{% url 'manage_course_url' course.id %}"><button>Manage Course</button></a>
+<br>
   {% for module in modules%}
       <div id="moduletitle"> <h3> Module {{module.position}}: {{module.title}} </h3>
 
@@ -28,14 +29,6 @@
 <div class="dropdown-content">
 <a href = "{% url 'manage_module_url' module.id %}">Manage Module</a>
 <a href = "{% url 'delete_module_url' module.id %}">Delete Module</a> 
-<a href="{%url 'add_component_url' module.id %}">Add Component</a>
-    {%if module.quiz_bank %}
-    {% else %}
-        <a href = "{% url 'add_quiz_url' module.id %}">Add quiz</a>
-        <br>
-        <br>
-        <br>
-    {% endif %}
 </div>
 </div>
 
@@ -48,8 +41,8 @@
 <br>
     {% for component in module.components%}
         <div id="component{{ component.id }}">
-            <button onclick="deleteComponent({{ component.id }});">Delete Component</button>
-            <button onclick="removeComponent({{ component.id }});">Remove from Module</button>
+            <button id='deletebutton' onclick="deleteComponent({{ component.id }});">Delete Component</button>
+            <button id'removebutton' onclick="removeComponent({{ component.id }});">Remove from Module</button>
           {% if component.image %}
             <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
           {%endif%}
@@ -60,20 +53,24 @@
     {%endfor%}
   <br>
     <!-- <a href="{%url 'add_component_url' module.id %}"><button>Add Component</button></a> -->
-
+    <div id = 'center'>
+    <a href="{%url 'add_component_url' module.id %}"> + Add Component</a>
+    </div>
+     <br>
     {%if module.quiz_bank %}
         <div id="quiz"><i> <span>Quiz: </span>{{module.quiz_bank.0}}</i></div>
-        <br>
-        <br>
-        <br>
     {% else %}
-
+    <div id = 'center'>
+      <a href = "{% url 'add_quiz_url' module.id %}"> + Add quiz</a>
+    </div>
     {% endif %}
+        <br>
 {% endfor %}
-
-
-
+<hr>
 <br>
+<br>
+
+
 <div id='center'>
 <a href="{% url 'create_module_url' course.id %}"> + Add module </a> </div>
 <br>
