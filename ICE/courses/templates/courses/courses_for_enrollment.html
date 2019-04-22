@@ -11,7 +11,7 @@
 <a href="{% url 'course_list_url' %}"><p>My courses</p></a>
 
 <h1>Course available for enrollment:</h1>
-
+<article id="selectcategory">
 <h3>Select category to display courses from particular category:</h3>
 <!--Would be super nice to use AJAX here, but no need anymore I guess-->
 <form method="get" action="">
@@ -22,14 +22,14 @@
         <br>
     {% endfor %}
     </select>
-    <button type ="submit">Submit</button>
+    
 </form>
 
 <!--Check if any category has been selected-->
 {% if selected_category %}
     <h3>Course(s) from {{ selected_category }} category</h3>
 {% else %}
-    <h3>Or view all courses as a list</h3>
+    <!--<h3>Or view all courses as a list</h3>-->
 {% endif %}
 
 {% for course in courses %}
@@ -49,3 +49,7 @@
 
 
 {% endfor %}
+
+
+<button type ="submit">Submit</button>
+</article>
