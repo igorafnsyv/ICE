@@ -7,17 +7,20 @@
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
-
-<h1>Completed Courses</h1>
+<div id="completedcourse">
+<h1>Completed Courses:</h1>
 
 {% for completion in completion_records %}
 
     <h3>{{ completion.course.title }}</h3>
-    <h5>Credits Awarded: {{ completion.course.credit_units }} </h5>
-    <h5>Completion Date:  {{ completion.date_completed }} </h5>
-    <h4>Cumulative CECU after course was completed:  {{ completion.cumulative_credits }} </h4>
-    <br>
+	<div id="infocourse">
+    <h3>Credits Awarded: {{ completion.course.credit_units }} </h3>
+    <h3>Completion Date:  {{ completion.date_completed }} </h3>
+    <h3>Cumulative CECU after course was completed:  {{ completion.cumulative_credits }} </h3>
+    
 {% endfor %}
 
 
-<h2 id= "creditearned"> You have earned {{ total_credits }} credits in total</h2>
+<h3 id= "creditearned"> You have earned {{ total_credits }} credits in total</h3>
+</div>
+</div>

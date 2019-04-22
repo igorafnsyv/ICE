@@ -149,6 +149,25 @@ form {
 	padding: 4px;
 
 }
+
+#completedcourse{
+	width: 100%;
+	margin-top: 3px;
+	margin-left: 1px;
+	background-color: #f4f7f8;
+	border-radius: 8px;
+	border: 1px black solid;
+	text-align: left;
+	padding: 5px;
+	padding-left:1px;
+		
+}
+
+#infocourse{
+	
+	font-size: 10px;
+	
+}
 #form{
 
 text-align: center;
