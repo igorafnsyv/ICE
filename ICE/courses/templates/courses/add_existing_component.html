@@ -1,5 +1,6 @@
 <head>
 {%load static%}
+<script src="{% static 'javascript/add_existing_component.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
 <title> Add Component </title>
 <div id = "header">
@@ -14,15 +15,19 @@
         <a href = "{% url 'add_component_url' module.id %}">  <p id ='navP'> > Add Component </p>  </a>
 </nav>
 
-
+<input type = "hidden" id="moduleId" value="{{ module.id }}">
 <h1>{{module.title}} </h1>
 <form action = "{% url 'add_component_url' module.id %}" method = "POST">
 {% csrf_token %}
 <h4>Select the component to add to this module</h4>
-<br> 
+<br>
+<h4>Components selected by you:</h4>
+<ul id="selectedList">
+
+</ul>
 {% for component in components%}
         <br> 
-        <input type = "checkbox" name = "component{{component.id}}" value = "{{component.id}}"> {{component.title}}
+        <input type = "checkbox" id="component{{ component.id }}" onchange="selectComponent({{ component.id }});" name = "component{{component.id}}" value = "{{component.title}}"> {{component.title}}
         <br>   
         {% if component.image %}
                 <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
@@ -33,7 +38,7 @@
               
         {%endif%}
         
- Position:<input type="number" name="position{{ component.id }}">
+ <!--Position:<input type="number" name="position{{ component.id }}"> -->
  <br> 
  <br> 
  <br>
@@ -41,5 +46,5 @@
 {% endfor %}
 <br>
 <br>
-<button type = "submit">Submit</button>
+<button type = "submit" onclick="return componentPositioning();">Submit</button>
 </form>
