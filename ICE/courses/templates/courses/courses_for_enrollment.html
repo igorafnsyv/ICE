@@ -1,7 +1,7 @@
 <head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
-<title> {{module.title}} </title>
+<title> Available Courses</title>
 <div id = "header">
 <a href = "/accounts/logout/"><h2 id="logout"> Logout</h2></a>
 <h2>  Welcome to <span> I.C.E. </span></h2>
@@ -10,7 +10,7 @@
 
 <a href="{% url 'course_list_url' %}"><p>My courses</p></a>
 
-<h1>Course available for enrollment:</h1>
+<h1>Available Courses</h1>
 
 <h3>Select category to display courses from particular category:</h3>
 <!--Would be super nice to use AJAX here, but no need anymore I guess-->

@@ -1,10 +1,22 @@
+<head>
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
+<script src="{% static 'javascript/module_create.js' %}"></script>
+<title> Manage </title>
+<input id="courseId"type="hidden" value="{{ course.id }}">
+<div id = "header">
+<a href = "/accounts/logout/"><h2 id="logout"> Logout</h2></a>
+<h2>  Welcome to <span> I.C.E. </span></h2>
+</div>
+</head>
 
+<br>
 {% if manage_course %}
-    <h2>Modify Course</h2>
+    <h1>Modify Course</h1>
 {% else %}
-    <h2>Modify Module</h2>
+    <h1>Modify Module</h1>
 {% endif %}
-
+<br>
 {% load static %}
 <script src ="{% static 'javascript/component_reordering.js' %}"></script>
 {% if manage_course %}
@@ -14,7 +26,9 @@
 {% endif %}
 <form action="" method="post">
     {% csrf_token %}
-    Change Title: <input type="text", name="title">
+        &nbsp;   &nbsp;Change Title: <input type="text", name="title">
+    <br>
+    <br>
     <br>
     {% if manage_course %}
         <h3>Drag and Drop Module names to reorder them:</h3>
@@ -27,5 +41,7 @@
             <li id = "{{ component.id }}" draggable="true" ondragover="dragOver(event)" ondragstart="dragStart(event)">{{ component.title }}</li>
         {% endfor %}
     </ul>
+    <br>
+    <br>
     <button type="submit" onclick="return savePosition();">Submit</button>
 </form>
