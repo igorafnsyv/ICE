@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=50, db_index= True, blank=True, null=True)
+    title = models.CharField(max_length=50, db_index=True, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -26,11 +26,11 @@ class Learner (models.Model):
 
 
 class Instructor (models.Model):
-    first_name = models.CharField(max_length = 50, db_index = True)
+    first_name = models.CharField(max_length=50, db_index=True)
     last_name = models.CharField(max_length=50, db_index=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     introduction = models.TextField()
-    email = models.EmailField(max_length=50, blank= True, null= True)
+    email = models.EmailField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -68,7 +68,7 @@ class CourseCompletion(models.Model):
 class Module(models.Model):
 
     title = models.CharField(max_length=150, db_index=True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, null = True, blank = True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
     position = models.IntegerField(db_index=True, null=True, blank=True)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
 
@@ -96,5 +96,4 @@ class Component(models.Model):
     position = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return '{}'.format(self.title) 
-
+        return '{}'.format(self.title)

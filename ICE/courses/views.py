@@ -248,9 +248,11 @@ class ModuleCreate (View):
             module.position = insertion_position
             existing_modules = Module.objects.filter(course=course)
             for existing_module in existing_modules:
-                if existing_module.position >= int(insertion_position):
-                    existing_module.position += 1
-                    existing_module.save()
+                # if position is set. Avoid NoneType error
+                if existing_module.position:
+                    if existing_module.position >= int(insertion_position):
+                        existing_module.position += 1
+                        existing_module.save()
         module.save()
         new_module = module
 
