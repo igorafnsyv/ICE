@@ -191,6 +191,8 @@ def component_remove_module(request, component_id):
 
 
 def new_module_add_components(request, component_id, position, course_id):
+    # if it is the first element, create a temporary module for it
+    # later in ModuleCreate module title will be changed and assigned to the course
     if int(position) == 0:
         course = Course.objects.get(id=course_id)
 
@@ -221,7 +223,16 @@ class ModuleCreate (View):
 
     def post(self, request, course_id):
         course = Course.objects.get(id__iexact=course_id)
-        module = Module.objects.get(title='Igor is bad at AJAX')
+        module = Module.objects.filter(title='Igor is bad at AJAX')
+        # There is a chance that no components are added
+        # And thus no module was created, have to check that
+        if module.exists():
+            module = module[0]
+        else:
+            Module.objects.create(title="temp",
+                                  instructor=request.user.instructor,
+                                  course=course)
+            module = Module.objects.all()[len(Module.objects.all()) - 1]
         module.title = request.POST['title']
         if not request.POST['position']:
 
