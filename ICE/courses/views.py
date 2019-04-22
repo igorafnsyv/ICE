@@ -75,8 +75,7 @@ def study_course(request, course_id):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
     course = Course.objects.get(id__iexact=course_id)
-    modules = Module.objects.filter(course=course)
-    print(modules)
+    modules = Module.objects.filter(course=course).order_by('position')
     availability = True
     learner = request.user.learner
     completed_modules = learner.completed_modules.all()

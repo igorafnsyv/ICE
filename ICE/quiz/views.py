@@ -14,7 +14,6 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 
-
 # Create your views here.
 class QuizAdd(View):
 
@@ -49,10 +48,9 @@ class QuizTake(View):
         if request.user.is_anonymous:
             return redirect('/accounts/login')
         quiz_bank = QuizBank.objects.get(id=quiz_bank_id)
-        print(quiz_bank)
         questions = list(Question.objects.filter(quizBank=quiz_bank))
         shuffle(questions)
-        questions[:quiz_bank.required_questions_num]
+        questions = questions[:quiz_bank.required_questions_num]
         for question in questions:
             answer_options = AnswerOptions.objects.filter(question=question)
             question.answer_options = answer_options

@@ -52,9 +52,9 @@ let result = true;
                 password1.value="";
                 password2.value="";
                 result = false;
-                return false
+            } else {
+                result = true;
             }
-            return true;
         }
       };
       //let username = document.getElementById('id_username');
