@@ -188,6 +188,7 @@ def component_remove_module(request, component_id):
 # class based view to override Post function
 
 
+# todo see if possible to merge with other similar functions
 def new_module_add_components(request, component_id, position, course_id):
     # if it is the first element, create a temporary module for it
     # later in ModuleCreate module title will be changed and assigned to the course
@@ -293,6 +294,7 @@ class ManageCourse(View):
         return redirect(course)
 
 
+# todo see if possible to merge with add_components_ordered_module
 def apply_element_position(request, component_id, position, element_type):
     if element_type == str(1):
         current_element = Component.objects.get(id=component_id)

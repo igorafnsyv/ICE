@@ -1,3 +1,6 @@
+//maybe can merge all reordering in one similar file
+//main function will receive a parameter -> address of the function?
+
 let previousElement;
 
 function dragOver(e) {
