@@ -1,11 +1,11 @@
-
+	
 button {
 	background-color: #404040;
 	padding-top: 7px;
 	padding-bottom:7px;
 	padding-right:20px;
 	padding-left: 20px;
-	color:white;
+	color:white; 
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
@@ -139,11 +139,24 @@ form {
 }
 
 #createcourse {
-	width: 100%;
+	width: 80%;
+	margin-right: auto;
+	margin-left: auto;
+	background-color: #f4f7f8;
+	border-radius: 8px;
+	border: 1px black solid;
+	text-align: center;
+	padding: 4px;
+
+}
+#form{
+
+text-align: center;
 }
 
 #navP {
 	display: inline;
+	text-decoration: underline;
 }
 
 #logintable {
@@ -175,7 +188,7 @@ form {
 }
 
 #signupdiv {
-	width: 500px;
+	width: 200px;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -224,7 +237,9 @@ form {
 	padding-left: 20px;
 	color:white;
 	display: block;
-	margin-lefts: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	display: inline;
 }
 
 #registerdiv {
@@ -232,6 +247,64 @@ form {
 	margin-left:40%;
 }
 
+#changebuttondiv{
+	text-align: center;
+}
+
+#submitButton{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	display: inline;
+}
+
+#nodeco {
+	text-decoration: none;
+}
+
+#center{
+	text-align: center;
+}
+
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+}
 
 
 

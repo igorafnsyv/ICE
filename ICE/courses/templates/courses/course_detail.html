@@ -14,15 +14,35 @@
         <a href = "{{ course.get_absolute_url }}">  <p id ='navP'> > {{course.title}}</p>  </a> 
 </nav>
 
-<h1>{{course.title}}<a href = "{% url 'component_upload_url' course.id %}"><button>Add Component to Course</button></a> </h1>
+<h1>{{course.title}} </h1>
+<a href = "{% url 'component_upload_url' course.id %}"><button>Create Component </button></a>
+<br>
 {#{course.id}#}
 
 <a href = "{% url 'manage_course_url' course.id %}"><button>Manage Course</button></a>
   {% for module in modules%}
       <div id="moduletitle"> <h3> Module {{module.position}}: {{module.title}} </h3>
-    <a href = "{% url 'manage_module_url' module.id %}"><button>Manage Module</button></a>
+
+<div class="dropdown">
+<button class="dropbtn">Select: </button>
+<div class="dropdown-content">
+<a href = "{% url 'manage_module_url' module.id %}">Manage Module</a>
+<a href = "{% url 'delete_module_url' module.id %}">Delete Module</a> 
+<a href="{%url 'add_component_url' module.id %}">Add Component</a>
+    {%if module.quiz_bank %}
+    {% else %}
+        <a href = "{% url 'add_quiz_url' module.id %}">Add quiz</a>
+        <br>
+        <br>
+        <br>
+    {% endif %}
+</div>
+</div>
+
     </div>
-      <a href = "{% url 'delete_module_url' module.id %}"><button>Delete Module</button></a>
+  <!--   <a href = "{% url 'manage_module_url' module.id %}"><button>Manage Module</button></a> 
+     <br>
+      <a href = "{% url 'delete_module_url' module.id %}"><button>Delete Module</button></a> -->
 <br>
 <br>
 <br>
@@ -38,30 +58,24 @@
           {%endif%}
         </div>
     {%endfor%}
-  <!--  <a href = "{%url 'add_component_url' module.id %} ">Add Component</a> -->
   <br>
-    <a href="{%url 'add_component_url' module.id %}"><button>Add Component</button></a>
-    <br>
-    <br>
-    <br>
-    <br>
+    <!-- <a href="{%url 'add_component_url' module.id %}"><button>Add Component</button></a> -->
+
     {%if module.quiz_bank %}
         <div id="quiz"><i> <span>Quiz: </span>{{module.quiz_bank.0}}</i></div>
         <br>
         <br>
         <br>
     {% else %}
-        <a href = "{% url 'add_quiz_url' module.id %}"><button>Add quiz</button></a>
-        <br>
-        <br>
-        <br>
+
     {% endif %}
 {% endfor %}
 
 
 
 <br>
-<a href="{% url 'create_module_url' course.id %}"><button id = "new">Add module</button></a>
+<div id='center'>
+<a href="{% url 'create_module_url' course.id %}"> + Add module </a> </div>
 <br>
 <br>
 <br>

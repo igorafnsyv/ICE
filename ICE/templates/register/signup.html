@@ -6,25 +6,20 @@
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
-<div id="signupdiv">
 <h3>Please, provide your Staff ID.</h3>
 
 <form action = "{% url 'sign_up_url' %}", method="post" onsubmit= "return validateMyForm();">
+	<div>
     {% csrf_token %}
     <input id = 'staff_id' name ="id">
     <br>
-    <br>
-    <button id='submitbutton' type ="submit">Submit</button>
+    <br></div>
+    <button id='submitButton' type ="submit">Submit</button>
 </form>
-<div id = 'message'></div>
+<div id = 'message'>
 </div> 
 
 <script src = "{% static 'javascript/verify_staff_id.js' %}"></script>
+
+
