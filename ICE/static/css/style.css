@@ -47,6 +47,12 @@ h4{
 	padding-left: 10px;
 }
 
+#coursetitle
+{
+	padding-left:1px;
+	margin-bottom:0px;
+}
+
 h5 {
 	font-size: 40px;
 	font-weight: bold;
@@ -162,7 +168,14 @@ form {
 	padding-left:1px;
 		
 }
-
+#completecourse{	
+	padding: 1px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  border-collapse: collapse;
+	width: 100%;
+	
+}
 #infocourse{
 	
 	font-size: 10px;
@@ -260,7 +273,11 @@ text-align: center;
 	margin-right: auto;
 	display: inline;
 }
-
+#enrollbutton{
+	
+	
+	margin-left:800px;
+}
 #registerdiv {
 	width: 400px;
 	margin-left:40%;
@@ -283,6 +300,11 @@ text-align: center;
 
 #center{
 	text-align: center;
+}
+
+#newtable
+{
+	margin-top:0px;
 }
 
 .dropbtn {
@@ -315,6 +337,7 @@ text-align: center;
   display: block;
 }
 
+
 #selectcategory{
 	
 	width: 80%;
@@ -333,6 +356,7 @@ text-align: center;
 	color:black;
 }
 
+
 .dropdown-content a:hover {background-color: #f1f1f1}
 
 .dropdown:hover .dropdown-content {
@@ -343,6 +367,7 @@ text-align: center;
   background-color: #3e8e41;
 }
 
+
 #deletebutton{
  display: inline;
 }
@@ -350,6 +375,12 @@ text-align: center;
 #removebutton{
  display: inline;
 }
+
+#row
+{
+	margin-left:1px;
+}
+
 
 
 

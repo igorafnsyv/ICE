@@ -7,12 +7,13 @@
 <h2>  Welcome to <span> I.C.E. </span></h2>
 </div>
 </head>
-<div id="completedcourse">
 <h1>Completed Courses:</h1>
+
 
 {% for completion in completion_records %}
 
     <h3>{{ completion.course.title }}</h3>
+	<div id="completecourse">
 	<div id="infocourse">
     <h3>Credits Awarded: {{ completion.course.credit_units }} </h3>
     <h3>Completion Date:  {{ completion.date_completed }} </h3>
