@@ -1,6 +1,8 @@
 <head>
 {%load static%}
-<script src="{% static 'javascript/add_existing_component.js' %}"></script>
+<script src="{% static 'javascript/module_create.js' %}"></script>
+
+
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
 <title> Add Component </title>
 <div id = "header">
@@ -22,12 +24,17 @@
 <h4>Select the component to add to this module</h4>
 <br>
 <h4>Components selected by you:</h4>
-<ul id="selectedList">
+<ul id="selectedComponents">
+    {% for existing_component in components_in_module %}
+        <li id="component{{ existing_component.id }}" draggable="true" ondragstart="dragStart(event);" ondragover="dragOver(event);" value="{{ existing_component.id }}">{{ existing_component }}</li>
+    {% endfor %}
 
 </ul>
+
+
 {% for component in components%}
         <br> 
-        <input type = "checkbox" id="component{{ component.id }}" onchange="selectComponent({{ component.id }});" name = "component{{component.id}}" value = "{{component.title}}"> {{component.title}}
+        <input type = "checkbox" id="{{ component.id }}" onchange="addSelected({{ component.id }});" name = "component{{component.id}}" value = "{{component.title}}"> {{component.title}}
         <br>   
         {% if component.image %}
                 <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
@@ -46,5 +53,5 @@
 {% endfor %}
 <br>
 <br>
-<button type = "submit" onclick="return componentPositioning();">Submit</button>
+<button type = "submit" onclick="return saveOrder('existingModule');">Submit</button>
 </form>

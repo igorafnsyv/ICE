@@ -31,7 +31,9 @@ function savePosition() {
             console.log("sent");
         }
       };
-      xhttp.open("GET", "/courses/apply_element_position/" + elements[i].id +'/' + i +'/' + element_type.value +'/' , false);
+      // -1 is oppended here since the child component is already assigned to a parent component
+      // this is not the best solution but at least trying to follow DRY Principle
+      xhttp.open("GET", "/courses/apply_element_position/" + elements[i].id +'/' + i +'/' + element_type.value +'/-1' , false);
       xhttp.send();
     }
     return true;

@@ -43,8 +43,10 @@ function isBefore(elementOne, elementTwo) {
 
 }
 
-function saveOrder() {
-    let positionedComponents = document.getElementsByTagName("li");
+function saveOrder(operation) {
+    if (operation === "existingModule")
+        var moduleId = document.getElementById("moduleId");
+    let positionedComponents = document.getElementsByTagName("LI");
     let courseId = document.getElementById("courseId");
     if (positionedComponents.length > 0) {
         for (var i = 0; i < positionedComponents.length; i++) {
@@ -54,9 +56,16 @@ function saveOrder() {
                     console.log("sent");
                 }
             };
-            xhttp.open("GET", "/courses/new_module_save_positions/" + positionedComponents[i].value + '/' + i + '/' + courseId.value , false);
+            if (operation === "moduleCreate") {
+                xhttp.open("GET", "/courses/new_module_save_positions/" + positionedComponents[i].value + '/' + i + '/' + courseId.value , false);
+            }
+            if (operation === "existingModule") {
+                //xhttp.open("GET", "/courses/existing_comp_position/" + moduleId.value + "/" + positionedComponents[i].value  + "/" + i , false);
+                xhttp.open("GET", "/courses/apply_element_position/"  + positionedComponents[i].value  + "/" + i +"/1/" + moduleId.value , false);
+            }
             xhttp.send();
         }
     }
     return true;
+
 }

@@ -132,14 +132,14 @@ class CourseCreate(View):
         return render(request, 'courses/course_create.html', context={'form': form,
                                                                       'instructor': instructor})
 
-    # todo identify instructor by id rather than name and surname
+
     def post (self, request):
         bound_course = CourseForm(request.POST)
-        instructor = Instructor.objects.get(first_name=request.POST['instructor_first_name'],
-                                            last_name=request.POST['instructor_last_name'])
+        #instructor = Instructor.objects.get(first_name=request.POST['instructor_first_name'],
+        #                                    last_name=request.POST['instructor_last_name'])
         if bound_course.is_valid:
             obj = bound_course.save(commit=False)
-            obj.instructor = instructor
+            obj.instructor = request.user.instructor
             obj.save()
         courses = Course.objects.all()
         return redirect(courses[len(courses) - 1])
@@ -293,17 +293,6 @@ class ManageCourse(View):
         return redirect(course)
 
 
-# todo see if possible to merge with add_components_ordered_module
-def apply_element_position(request, component_id, position, element_type):
-    if element_type == str(1):
-        current_element = Component.objects.get(id=component_id)
-    else:
-        current_element = Module.objects.get(id=component_id)
-    current_element.position = int(position) + 1
-    current_element.save()
-    return HttpResponse(None)
-
-
 # use this class to upload a new component
 class ComponentUpload (View):
     def get(self, request, course_id):
@@ -328,6 +317,22 @@ class ComponentUpload (View):
         return redirect(course)
 
 
+# module id is -1 in case we are passing module object, or it is already set
+# module id has actual value if we are passing new components to the module
+def apply_element_position(request, component_id, position, element_type, module_id):
+    # element type == 1 if element is Component
+    # element type == 2 if element is Module
+    if element_type == str(1):
+        current_element = Component.objects.get(id=component_id)
+        if int(module_id) != -1:
+            current_element.module = Module.objects.get(id=module_id)
+    else:
+        current_element = Module.objects.get(id=component_id)
+    current_element.position = int(position) + 1
+    current_element.save()
+    return HttpResponse(None)
+
+'''
 def add_components_ordered_module(request, module_id, component_id, position):
     current_component = Component.objects.get(id=component_id)
     module = Module.objects.get(id=module_id)
@@ -335,19 +340,21 @@ def add_components_ordered_module(request, module_id, component_id, position):
     current_component.position = int(position) + 1
     current_component.save()
     return HttpResponse("saved")
-
+'''
 
 class ComponentCreate(View):
 
-    # todo identify instructor who created component
     def get(self, request, module_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
         module = Module.objects.get(id=module_id)
         course = module.course
+        components_in_module = Component.objects.filter(module=module)
         components = Component.objects.filter(course=course, module=None)
-        return render(request, 'courses/add_existing_component.html', context={'module': module,
-                                                                               'components': components})
+        return render(request, 'courses/add_existing_component.html',
+                      context={'module': module,
+                               'components': components,
+                               'components_in_module': components_in_module})
 
     def post(self, request, module_id):
 

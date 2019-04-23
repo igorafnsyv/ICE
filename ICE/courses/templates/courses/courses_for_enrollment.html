@@ -1,4 +1,4 @@
-<head>
+<head xmlns="http://www.w3.org/1999/html">
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
 <title> Available Courses</title>
@@ -31,28 +31,31 @@
 <button type ="submit">Submit</button>
 </form>
 <div id="completecourse">
-<table>
-<!--Check if any category has been selected-->
-{% if selected_category %}
-    <h3 id="coursetitle">List of course(s) from {{ selected_category }} category:</h3>
-{% else %}
-    <!--<h3>Or view all courses as a list</h3>-->
-{% endif %}
-<br>
-{% for course in courses %}
- <tr> Course Title: {{ course.title }}</tr>
- <br>
- <tr>   Course Description: {{ course.description }}</tr> 
- <br>
- <tr>   Instructor: {{ course.instructor }} </tr>  
- <br>
- <tr>   Instructor info: {{ course.instructor.introduction }} </tr>
- <br>
-	<tr>CECUs awarded: {{ course.credit_units }} </tr>  
-	<tr><a id="enrollbutton" href="{% url 'enroll_in_course_url' course.id %}">>>Enroll</a></tr>
-</table>
+    <table>
+    <!--Check if any category has been selected-->
+    {% if selected_category %}
+        <h3 id="coursetitle">List of course(s) from {{ selected_category }} category:</h3>
+    {% else %}
+        <!--<h3>Or view all courses as a list</h3>-->
+    {% endif %}
+    <br>
+    {% for course in courses %}
+        <tr><b>Course Title: {{ course.title }}</b></tr>
+         <br>
+         <tr>   Course Description: {{ course.description }}</tr>
+         <br>
+         <tr>   Instructor: {{ course.instructor }} </tr>
+         <br>
+         <tr>   Instructor info: {{ course.instructor.introduction }} </tr>
+         <br>
+        <tr>CECUs awarded: {{ course.credit_units }} </tr>
+        <tr><a id="enrollbutton" href="{% url 'enroll_in_course_url' course.id %}">>>Enroll</a></tr>
+        <br>
+        <br>
 
-{% endfor %}
+
+    {% endfor %}
+    </table>
 </div>
 
 </article>

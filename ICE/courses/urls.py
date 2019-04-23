@@ -20,10 +20,10 @@ urlpatterns = [
     path('completed_courses/', views.completed_courses_list, name='completed_courses_list_url'),
     path('upload_component/<str:course_id>/', views.ComponentUpload.as_view(), name='component_upload_url'),
     path('manage_module/<str:module_id>/', views.ManageModule.as_view(), name='manage_module_url'),
-    path('apply_element_position/<str:component_id>/<str:position>/<str:element_type>/', views.apply_element_position),
+    path('apply_element_position/<str:component_id>/<str:position>/<str:element_type>/<str:module_id>/', views.apply_element_position),
     path('manage_course/<str:course_id>/', views.ManageCourse.as_view(), name='manage_course_url'),
     path('new_module_save_positions/<str:component_id>/<str:position>/<str:course_id>/', views.new_module_add_components),
-    path('existing_comp_position/<str:module_id>/<str:component_id>/<str:position>', views.add_components_ordered_module),
+    #path('existing_comp_position/<str:module_id>/<str:component_id>/<str:position>', views.add_components_ordered_module),
 
 ]
 
