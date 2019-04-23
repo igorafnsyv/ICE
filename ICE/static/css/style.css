@@ -149,6 +149,25 @@ form {
 	padding: 4px;
 
 }
+
+#completedcourse{
+	width: 100%;
+	margin-top: 3px;
+	margin-left: 1px;
+	background-color: #f4f7f8;
+	border-radius: 8px;
+	border: 1px black solid;
+	text-align: left;
+	padding: 5px;
+	padding-left:1px;
+		
+}
+
+#infocourse{
+	
+	font-size: 10px;
+	
+}
 #form{
 
 text-align: center;
@@ -296,6 +315,27 @@ text-align: center;
   display: block;
 }
 
+<<<<<<< HEAD
+=======
+#selectcategory{
+	
+	width: 80%;
+	margin-right: auto;
+	margin-left: auto;
+	background-color: #f4f7f8;
+	border-radius: 8px;
+	border: 1px black solid;
+	text-align: center;
+	padding: 4px;
+	
+	
+}
+#creditearned
+{
+	color:black;
+}
+
+>>>>>>> 04ba2b1354658607a9f5e322ed9f80aaa4eabcd1
 .dropdown-content a:hover {background-color: #f1f1f1}
 
 .dropdown:hover .dropdown-content {

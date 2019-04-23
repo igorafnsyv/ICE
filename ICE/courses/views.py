@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .models import Course, Module, Component, Learner, Instructor, Category, CourseCompletion
-from django.contrib.auth.models import Group, User
 from quiz.models import QuizBank
 from django.http import HttpResponse
 from django.views.generic import View
@@ -189,6 +188,7 @@ def component_remove_module(request, component_id):
 # class based view to override Post function
 
 
+# todo see if possible to merge with other similar functions
 def new_module_add_components(request, component_id, position, course_id):
     # if it is the first element, create a temporary module for it
     # later in ModuleCreate module title will be changed and assigned to the course
@@ -283,8 +283,6 @@ class ManageCourse(View):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
         all_modules = Module.objects.filter(course=Course.objects.get(id=course_id)).order_by('position')
-
-        # todo rename manage_module template to manage_content
         return render(request, 'courses/manage_module.html', context={'all_components': all_modules,
                                                                       'manage_course': True})
 
@@ -296,6 +294,7 @@ class ManageCourse(View):
         return redirect(course)
 
 
+# todo see if possible to merge with add_components_ordered_module
 def apply_element_position(request, component_id, position, element_type):
     if element_type == str(1):
         current_element = Component.objects.get(id=component_id)
@@ -330,6 +329,15 @@ class ComponentUpload (View):
         return redirect(course)
 
 
+def add_components_ordered_module(request, module_id, component_id, position):
+    current_component = Component.objects.get(id=component_id)
+    module = Module.objects.get(id=module_id)
+    current_component.module = module
+    current_component.position = int(position) + 1
+    current_component.save()
+    return HttpResponse("saved")
+
+
 class ComponentCreate(View):
 
     # todo identify instructor who created component
@@ -343,35 +351,9 @@ class ComponentCreate(View):
                                                                                'components': components})
 
     def post(self, request, module_id):
-        # might result in a case that component is associated with module but not with course
+
+        # component ordering is handled by add_components_ordered_module
         module = Module.objects.get(id__iexact=module_id)
         course = module.course
-
-        # traverse dictionary as key value pair
-        for key, value in request.POST.items():
-
-            # if string 'component' is found in key
-            if "component" in key:
-                component = Component.objects.get(id__iexact=value)
-                component.module = module
-
-            # we are dealing with component positioning now
-            if 'position' in key:
-                if value:
-                    insertion_position = value
-                    if int(insertion_position) <= 0:
-                        insertion_position = 1
-                    module_components = Component.objects.filter(module=module)
-                    for existing_component in module_components:
-                        if insertion_position >= insertion_position:
-                            existing_component.position += 1
-                            existing_component.save()
-                    component.position = insertion_position
-
-                # if position is not specified, default action
-                if not value:
-                    previous_component_position = Component.objects.filter(module=module).count()
-                    component.position = previous_component_position + 1
-                component.save()
         return redirect(course)
 
