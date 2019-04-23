@@ -47,6 +47,12 @@ h4{
 	padding-left: 10px;
 }
 
+#coursetitle
+{
+	padding-left:1px;
+	margin-bottom:0px;
+}
+
 h5 {
 	font-size: 40px;
 	font-weight: bold;
@@ -267,11 +273,10 @@ text-align: center;
 	margin-right: auto;
 	display: inline;
 }
-#enrollbutton
-{
+#enrollbutton{
 	
-	margin-left: 800px;
 	
+	margin-left:800px;
 }
 #registerdiv {
 	width: 400px;

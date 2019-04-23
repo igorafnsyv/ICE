@@ -30,19 +30,17 @@
     <button type ="submit">Submit</button>
 </form>
 
-<br>
-<br>
 <div id="completecourse">
 <table>
 <!--Check if any category has been selected-->
 {% if selected_category %}
-    <h3>Course(s) from {{ selected_category }} category</h3>
+    <h3 id="coursetitle">List of course(s) from {{ selected_category }} category:</h3>
 {% else %}
     <!--<h3>Or view all courses as a list</h3>-->
 {% endif %}
-
+<br>
 {% for course in courses %}
- <tr>Course Title: {{ course.title }} </tr>
+ <tr> Course Title: {{ course.title }}</tr>
  <br>
  <tr>   Course Description: {{ course.description }}</tr> 
  <br>
@@ -50,8 +48,8 @@
  <br>
  <tr>   Instructor info: {{ course.instructor.introduction }} </tr>
  <br>
-	<tr> CECUs awarded: {{ course.credit_units }} </tr>    
-    <tr><a id="enrollbutton" href="{% url 'enroll_in_course_url' course.id %}">Enroll</a></tr>
+	<tr>CECUs awarded: {{ course.credit_units }} </tr>  
+	<tr><a id="enrollbutton" href="{% url 'enroll_in_course_url' course.id %}">>>Enroll</a></tr>
 </table>
 
 {% endfor %}
