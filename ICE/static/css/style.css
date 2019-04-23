@@ -296,20 +296,6 @@ text-align: center;
   display: block;
 }
 
-#selectcategory{
-	
-	width: 80%;
-	margin-right: auto;
-	margin-left: auto;
-	background-color: #f4f7f8;
-	border-radius: 8px;
-	border: 1px black solid;
-	text-align: center;
-	padding: 4px;
-	
-	
-}
-
 .dropdown-content a:hover {background-color: #f1f1f1}
 
 .dropdown:hover .dropdown-content {
@@ -318,14 +304,6 @@ text-align: center;
 
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
-}
-
-#deletebutton{
- display: inline;
-}
-
-#removebutton{
- display: inline;
 }
 
 
