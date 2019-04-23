@@ -337,6 +337,7 @@ text-align: center;
   display: block;
 }
 
+
 #selectcategory{
 	
 	width: 80%;
@@ -355,6 +356,7 @@ text-align: center;
 	color:black;
 }
 
+
 .dropdown-content a:hover {background-color: #f1f1f1}
 
 .dropdown:hover .dropdown-content {
@@ -364,6 +366,7 @@ text-align: center;
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
 }
+
 
 #deletebutton{
  display: inline;
@@ -377,6 +380,7 @@ text-align: center;
 {
 	margin-left:1px;
 }
+
 
 
 
