@@ -27,34 +27,33 @@
         <br>
     {% endfor %}
     </select>
-    
+    <button type ="submit">Submit</button>
 </form>
 
+<div id="completecourse">
+<table>
 <!--Check if any category has been selected-->
 {% if selected_category %}
-    <h3>Course(s) from {{ selected_category }} category</h3>
+    <h3 id="coursetitle">List of course(s) from {{ selected_category }} category:</h3>
 {% else %}
     <!--<h3>Or view all courses as a list</h3>-->
 {% endif %}
-
+<br>
 {% for course in courses %}
-    Course Title: {{ course.title }}
-    <br>
-    Course Description: {{ course.description }}
-    <br>
-    Instructor: {{ course.instructor }}
-    <br>
-    Instructor info: {{ course.instructor.introduction }}
-    <br>
-    CECUs awarded: {{ course.credit_units }}
-    <br>
-    <a href="{% url 'enroll_in_course_url' course.id %}">Enroll</a>
-    <br>
-    <br>
-
+ <tr> Course Title: {{ course.title }}</tr>
+ <br>
+ <tr>   Course Description: {{ course.description }}</tr> 
+ <br>
+ <tr>   Instructor: {{ course.instructor }} </tr>  
+ <br>
+ <tr>   Instructor info: {{ course.instructor.introduction }} </tr>
+ <br>
+	<tr>CECUs awarded: {{ course.credit_units }} </tr>  
+	<tr><a id="enrollbutton" href="{% url 'enroll_in_course_url' course.id %}">>>Enroll</a></tr>
+</table>
 
 {% endfor %}
+</div>
 
 
-<button type ="submit">Submit</button>
 </article>
