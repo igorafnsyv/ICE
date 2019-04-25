@@ -14,23 +14,20 @@
         <a href = "{{ course.get_absolute_url }}">  <p id ='navP'> > {{course.title}}</p>  </a> 
 </nav>
 
-<h1>{{course.title}} </h1>
-<a href = "{% url 'component_upload_url' course.id %}"><button>Create Component </button></a>
-<br>
+
+<a href = "{% url 'component_upload_url' course.id %}"><h2 id="logoutb">Create Component</h2></a>
+
 {#{course.id}#}
 
-<a href = "{% url 'manage_course_url' course.id %}"><button>Manage Course</button></a>
-<br>
+<a href = "{% url 'manage_course_url' course.id %}"><h2 id="logoutb">Manage Course</h2></a>
+<h1>{{course.title}} </h1>
   {% for module in modules%}
-      <div id="moduletitle"> <h3> Module {{module.position}}: {{module.title}} </h3>
+      <div id="moduletitle"> 
 
-<div class="dropdown">
-<button class="dropbtn">Select: </button>
-<div class="dropdown-content">
-<a href = "{% url 'manage_module_url' module.id %}">Manage Module</a>
-<a href = "{% url 'delete_module_url' module.id %}">Delete Module</a> 
-</div>
-</div>
+
+<a href = "{% url 'manage_module_url' module.id %}"><h2 id="logout">Manage Module</h2></a>
+<a href = "{% url 'delete_module_url' module.id %}"><h2 id="logout">Delete Module</h2></a> 
+<h3> Module {{module.position}}: {{module.title}} </h3>
 
     </div>
   <!--   <a href = "{% url 'manage_module_url' module.id %}"><button>Manage Module</button></a> 
@@ -41,8 +38,8 @@
 <br>
     {% for component in module.components%}
         <div id="component{{ component.id }}">
-            <button id='deletebutton' onclick="deleteComponent({{ component.id }});">Delete Component</button>
-            <button id'removebutton' onclick="removeComponent({{ component.id }});">Remove from Module</button>
+            <button id='inlinebuttons' onclick="deleteComponent({{ component.id }});">Delete Component</button>
+            <button id='inlinebuttons' onclick="removeComponent({{ component.id }});">Remove from Module</button>
           {% if component.image %}
             <img src="{{ component.image.url }}" alt="My image" width = 150, length = 150>
           {%endif%}
@@ -50,6 +47,9 @@
             <div id="componentbody" ><p>{{ component.body }}</p></div>
           {%endif%}
         </div>
+        <hr>
+        <br>
+        <br>
     {%endfor%}
   <br>
     <!-- <a href="{%url 'add_component_url' module.id %}"><button>Add Component</button></a> -->
