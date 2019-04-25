@@ -28,10 +28,11 @@
             {{field}}
         {% endfor %}
         <br>
-        <h3>Components selected by you</h3>
-        <ul id="selectedComponents">
-        </ul>
+
         {% if components %}
+            <h3>Components selected by you</h3>
+            <ul id="selectedComponents">
+            </ul>
             <h4>Select components you would like to add to this module</h4>
             {%for component in components%}
                 <input id="{{ component.id }}" type="checkbox" name = "component{{component.id}}" value = "{{component.title}}" onchange="addSelected({{ component.id }});"> {{component}}
@@ -46,6 +47,8 @@
                 {%endif%}
             {%endfor%}
             <br>
+        {% else %}
+            <h4>No Components found. Please, create Components first to add them to module.</h4>
         {% endif %}
         {% if quiz_banks %}
             <h4>Please, select the Quiz Bank to add to this module</h4>

@@ -6,8 +6,6 @@ from random import shuffle
 
 from courses.models import Module, Learner, CourseCompletion
 
-from .forms import QuizForm
-
 from django.views.generic import View
 
 from django.core.mail import EmailMultiAlternatives
@@ -24,10 +22,8 @@ class QuizAdd(View):
             return HttpResponse("<h1>You do not have access to this page</h1>")
         module = Module.objects.get(id__iexact=id)
         quiz_banks = QuizBank.objects.filter(module=None)
-        quiz_bank_form = QuizForm()
         return render(request, 'quiz/add_existing_quiz_bank.html', context={'module': module,
-                                                                            'quiz_banks': quiz_banks,
-                                                                            'form': quiz_bank_form})
+                                                                            'quiz_banks': quiz_banks})
 
     def post(self, request, id):
         module = Module.objects.get(id__iexact=id)

@@ -22,18 +22,22 @@
 <body>
 <h3>{{module.title}}</h3>
 
-<h4>Please, select the quiz bank to add to this module</h4>
-<form action = "{% url 'add_quiz_url' module.id %}" method = "POST">
-    {% csrf_token %}
-    {% for quiz_bank in quiz_banks %}
+{% if quiz_banks %}
+    <h4>Please, select the quiz bank to add to this module</h4>
+    <form action = "{% url 'add_quiz_url' module.id %}" method = "POST">
+        {% csrf_token %}
+        {% for quiz_bank in quiz_banks %}
 
-        <input class="bank" id="{{ quiz_bank.id }}" type="checkbox" value="{{ quiz_bank.id }}" name="selected_bank" onchange="bankSelect({{ quiz_bank.id }});"> {{ quiz_bank.title }}
+            <input class="bank" id="{{ quiz_bank.id }}" type="checkbox" value="{{ quiz_bank.id }}" name="selected_bank" onchange="bankSelect({{ quiz_bank.id }});"> {{ quiz_bank.title }}
+            <br>
+            <br>
+        {% endfor %}
+
         <br>
         <br>
-    {% endfor %}
-
-    <br>
-    <br>
-    <button type = "submit">Submit</button>
-</form>
+        <button type = "submit">Submit</button>
+    </form>
+{% else %}
+        <h4>No Quiz Banks were found. Please, create Quiz Bank first.</h4>
+{% endif %}
 </body>
