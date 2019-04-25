@@ -12,7 +12,7 @@
 
 <br>
 <nav id = 'banner'>
-        <a href = "{% url 'course_list_url' %}"> <p id='navP'> HOME </p> </a> 
+        <a href = "{% url 'course_list_url' %}"> <p id='navP'> HOME </p> </a>
         <a href = "{% url 'create_module_url' course.id %}">  <p id ='navP'> > Create Module </p>  </a>
 </nav>
 
@@ -21,7 +21,7 @@
 <h1> Create Module </h1>
 <br>
 <form action ="{% url 'create_module_url' course.id %}" method = "post">
-        
+
         {% csrf_token %}
         {%for field in form%}
             {{field.label}}

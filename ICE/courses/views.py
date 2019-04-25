@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.views.generic import View
 
 from .forms import ModuleForm, ComponentForm, CourseForm, ComponentUploadForm
+
+
 # Create your views here.
 
 
@@ -59,7 +61,6 @@ def all_courses(request):
 
 
 def course_enroll(request, course_id):
-
     # todo where to redirect user after successful enrollment?
     # todo fix redirection to course
     # To the list of courses learner enrolled or continue enrollment?
@@ -92,7 +93,7 @@ def study_course(request, course_id):
         else:
             module.available = availability
             availability = False
-        
+
     return render(request, "courses/study_course.html", context={'course': course,
                                                                  'modules': modules,
                                                                  'learner': learner})
@@ -128,7 +129,7 @@ def course_detail(request, id):
         module.components = elem
         quiz_bank = QuizBank.objects.filter(module=module)[:1]
         module.quiz_bank = quiz_bank
-        
+
     return render(request, 'courses/course_detail.html', context={'course': course,
                                                                   'modules': modules,
                                                                   'components': components})
@@ -145,8 +146,7 @@ class CourseCreate(View):
         return render(request, 'courses/course_create.html', context={'form': form,
                                                                       'instructor': instructor})
 
-
-    def post (self, request):
+    def post(self, request):
         bound_course = CourseForm(request.POST)
         if bound_course.is_valid:
             obj = bound_course.save(commit=False)
@@ -201,6 +201,8 @@ def component_remove_module(request, component_id):
     component.module = None
     component.save()
     return redirect(component.course)
+
+
 # class based view to override Post function
 
 
@@ -219,7 +221,7 @@ def new_module_add_components(request, component_id, position, course_id):
     return HttpResponse("ok")
 
 
-class ModuleCreate (View):
+class ModuleCreate(View):
 
     def get(self, request, course_id):
         if request.user.is_anonymous:
@@ -316,7 +318,7 @@ class ManageCourse(View):
 
 
 # use this class to upload a new component
-class ComponentUpload (View):
+class ComponentUpload(View):
     def get(self, request, course_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
@@ -379,4 +381,3 @@ class ComponentCreate(View):
         module = Module.objects.get(id__iexact=module_id)
         course = module.course
         return redirect(course)
-
