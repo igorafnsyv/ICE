@@ -1,4 +1,4 @@
-	
+
 button {
 	background-color: #404040;
 	padding-top: 7px;
@@ -113,7 +113,7 @@ form {
 	border-radius: 20px; 
 	color: white;
 	letter-spacing: 1px;
-	width: 80%;
+	width: 90%;
 	margin-right: auto;
 	margin-left: auto;
 }
@@ -222,10 +222,32 @@ text-align: center;
 	border-left: 1px solid white;
 }
 
+#logoutb {
+	float: right;
+	font-size:15px;
+	padding-top: 9px;
+	padding-bottom: 9px;
+	padding-right: 18px;
+	padding-left: 18px;
+	border-left: 1px solid black;
+	color: black;
+}
+
+#nocenter{
+	text-align:left;
+	margin-left:20px;
+}
+
+#inlinebuttons{
+	display:inline;
+	float:right;
+}
+
 #signupdiv {
 	width: 200px;
 	margin-left: auto;
 	margin-right: auto;
+	text-align: center;
 }
 
 #staff_id {
