@@ -20,25 +20,21 @@ class QuizAdd(View):
     def get(self, request, id):
         if request.user.is_anonymous:
             redirect('/accounts/login/')
+        if not hasattr(request.user, 'instructor'):
+            return HttpResponse("<h1>You do not have access to this page</h1>")
         module = Module.objects.get(id__iexact=id)
         quiz_banks = QuizBank.objects.filter(module=None)
         quiz_bank_form = QuizForm()
-        return render (request, 'quiz/add_existing_quiz_bank.html', context={'module': module,
-                                                                             'quiz_banks': quiz_banks,
-                                                                             'form': quiz_bank_form})
+        return render(request, 'quiz/add_existing_quiz_bank.html', context={'module': module,
+                                                                            'quiz_banks': quiz_banks,
+                                                                            'form': quiz_bank_form})
 
     def post(self, request, id):
-        module = Module.objects.filter(id__iexact = id)
-        i = 0
-        course = module[0].course
-        for quiz_bank_id in request.POST.getlist('quiz_bank_id'):
-            quiz_bank = QuizBank.objects.get(id__iexact=quiz_bank_id)
-            if request.POST.getlist('module')[i]:
-                module = Module.objects.get(id__iexact=request.POST.getlist('module')[i])
-                quiz_bank.module = module
-                quiz_bank.save()
-                course = module.course
-            i += 1
+        module = Module.objects.get(id__iexact=id)
+        course = module.course
+        quiz_bank = QuizBank.objects.get(id=request.POST['selected_bank'])
+        quiz_bank.module = module
+        quiz_bank.save()
         return redirect(course)
 
 
@@ -47,6 +43,8 @@ class QuizTake(View):
     def get(self, request, quiz_bank_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login')
+        if not hasattr(request.user, 'learner'):
+            return HttpResponse("<h1>You do not have access to this page</h1>")
         quiz_bank = QuizBank.objects.get(id=quiz_bank_id)
         questions = list(Question.objects.filter(quizBank=quiz_bank))
         shuffle(questions)

@@ -28,6 +28,8 @@ def courses_list(request):
 def completed_courses_list(request):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
+    if not hasattr(request.user, 'learner'):
+        return HttpResponse("<h1>You do not have access to this page</h1>")
     completion_records = CourseCompletion.objects.filter(learner=request.user.learner)
     total_credits = 0
     for completion in completion_records:
@@ -40,6 +42,8 @@ def completed_courses_list(request):
 def all_courses(request):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
+    if not hasattr(request.user, 'learner'):
+        return HttpResponse("<h1>You do not have access to this page</h1>")
     this_learner = request.user.learner
     courses_can_enroll = Course.objects.filter(status=1).exclude(learner=this_learner)
     categories = Category.objects.all()
@@ -61,6 +65,8 @@ def course_enroll(request, course_id):
     # To the list of courses learner enrolled or continue enrollment?
     if request.user.is_anonymous:
         return redirect('/accounts/login')
+    if not hasattr(request.user, 'learner'):
+        return HttpResponse("<h1>You do not have access to this page</h1>")
     this_learner = request.user.learner
     course = Course.objects.get(id=course_id)
     this_learner.courses.add(course)
@@ -68,10 +74,13 @@ def course_enroll(request, course_id):
     return redirect('course_list_url')
 
 
+# only for learner
 def study_course(request, course_id):
     # todo merge with course detail
     if request.user.is_anonymous:
         return redirect('/accounts/login')
+    if not hasattr(request.user, 'learner'):
+        return HttpResponse("<h1>You do not have access to this page</h1>")
     course = Course.objects.get(id__iexact=course_id)
     modules = Module.objects.filter(course=course).order_by('position')
     availability = True
@@ -92,6 +101,8 @@ def study_course(request, course_id):
 def study_module(request, id):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
+    if not hasattr(request.user, 'learner'):
+        return HttpResponse("<h1>You do not have access to this page</h1>")
     module = Module.objects.get(id__iexact=id)
     components = Component.objects.filter(module=module).order_by('position')
     quiz_bank = QuizBank.objects.get(module=module)
@@ -127,6 +138,8 @@ class CourseCreate(View):
     def get(self, request):
         if request.user.is_anonymous:
             return redirect('/accounts/login')
+        if not hasattr(request.user, 'instructor'):
+            return HttpResponse("<h1>You do not have access to this page</h1>")
         form = CourseForm()
         instructor = request.user.instructor
         return render(request, 'courses/course_create.html', context={'form': form,
@@ -135,8 +148,6 @@ class CourseCreate(View):
 
     def post (self, request):
         bound_course = CourseForm(request.POST)
-        #instructor = Instructor.objects.get(first_name=request.POST['instructor_first_name'],
-        #                                    last_name=request.POST['instructor_last_name'])
         if bound_course.is_valid:
             obj = bound_course.save(commit=False)
             obj.instructor = request.user.instructor
@@ -149,6 +160,8 @@ class CourseCreate(View):
 def module_delete(request, module_id):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
+    if not hasattr(request.user, 'instructor'):
+        return HttpResponse("<h1>You do not have access to this page</h1>")
     module = Module.objects.get(id__iexact=module_id)
     course = module.course
     removed_position = module.position
@@ -164,6 +177,8 @@ def module_delete(request, module_id):
 def component_delete(request, component_id):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
+    if not hasattr(request.user, 'instructor'):
+        return HttpResponse("<h1>You do not have access to this page</h1>")
     component = Component.objects.get(id__iexact=component_id)
     module = component.module
     course = module.course
@@ -180,6 +195,8 @@ def component_delete(request, component_id):
 def component_remove_module(request, component_id):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
+    if not hasattr(request.user, 'instructor'):
+        return HttpResponse("<h1>You do not have access to this page</h1>")
     component = Component.objects.get(id=component_id)
     component.module = None
     component.save()
@@ -193,7 +210,6 @@ def new_module_add_components(request, component_id, position, course_id):
     # later in ModuleCreate module title will be changed and assigned to the course
     if int(position) == 0:
         course = Course.objects.get(id=course_id)
-
         Module.objects.create(title='Igor is bad at AJAX', instructor=course.instructor, course=course, position=0)
     new_module = Module.objects.all()[len(Module.objects.all()) - 1]
     current_component = Component.objects.get(id=component_id)
@@ -208,6 +224,8 @@ class ModuleCreate (View):
     def get(self, request, course_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
+        if not hasattr(request.user, 'instructor'):
+            return HttpResponse("<h1>You do not have access to this page</h1>")
         course = Course.objects.get(id=course_id)
         form = ModuleForm()
         component_form = ComponentForm()
@@ -266,6 +284,8 @@ class ManageModule(View):
     def get(self, request, module_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
+        if not hasattr(request.user, 'instructor'):
+            return HttpResponse("<h1>You do not have access to this page</h1>")
         all_components = Component.objects.filter(module=Module.objects.get(id=module_id)).order_by('position')
         return render(request, 'courses/manage_module.html', context={'all_components': all_components})
 
@@ -281,6 +301,8 @@ class ManageCourse(View):
     def get(self, request, course_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
+        if not hasattr(request.user, 'instructor'):
+            return HttpResponse("<h1>You do not have access to this page</h1>")
         all_modules = Module.objects.filter(course=Course.objects.get(id=course_id)).order_by('position')
         return render(request, 'courses/manage_module.html', context={'all_components': all_modules,
                                                                       'manage_course': True})
@@ -298,6 +320,8 @@ class ComponentUpload (View):
     def get(self, request, course_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
+        if not hasattr(request.user, 'instructor'):
+            return HttpResponse("<h1>You do not have access to this page</h1>")
         component_upload_form = ComponentUploadForm()
         return render(request, 'courses/upload_new_component.html', context={'form': component_upload_form,
                                                                              'course_id': course_id})
@@ -332,21 +356,14 @@ def apply_element_position(request, component_id, position, element_type, module
     current_element.save()
     return HttpResponse(None)
 
-'''
-def add_components_ordered_module(request, module_id, component_id, position):
-    current_component = Component.objects.get(id=component_id)
-    module = Module.objects.get(id=module_id)
-    current_component.module = module
-    current_component.position = int(position) + 1
-    current_component.save()
-    return HttpResponse("saved")
-'''
 
 class ComponentCreate(View):
 
     def get(self, request, module_id):
         if request.user.is_anonymous:
             return redirect('/accounts/login/')
+        if not hasattr(request.user, 'instructor'):
+            return HttpResponse("<h1>You do not have access to this page</h1>")
         module = Module.objects.get(id=module_id)
         course = module.course
         components_in_module = Component.objects.filter(module=module)

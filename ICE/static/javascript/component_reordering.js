@@ -1,3 +1,8 @@
+var imported = document.createElement('script');
+imported.src = '/static/javascript/drag_drop_reordering.js';
+document.head.appendChild(imported);
+
+/*
 let previousElement;
 
 function dragOver(e) {
@@ -21,6 +26,8 @@ function isBefore(elementOne, elementTwo) {
     return false;
 
 }
+
+ */
 function savePosition() {
     let element_type = document.getElementById("element_type");
     let elements = document.getElementsByTagName('li');

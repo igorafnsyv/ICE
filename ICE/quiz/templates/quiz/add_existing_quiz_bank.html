@@ -1,6 +1,7 @@
 <head>
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}">
+<script src="{% static 'javascript/quizbank_selector.js' %}"></script>
 <title> Add Quiz </title>
 <div id = "header">
 <a href = "/accounts/logout/"><h2 id="logout"> Logout</h2></a>
@@ -21,20 +22,14 @@
 <body>
 <h3>{{module.title}}</h3>
 
+<h4>Please, select the quiz bank to add to this module</h4>
 <form action = "{% url 'add_quiz_url' module.id %}" method = "POST">
     {% csrf_token %}
     {% for quiz_bank in quiz_banks %}
 
-    <h4>Please, select the quiz bank and module for it</h4>
-    {{quiz_bank}}
-    <br>
-    {% for field in form %}
+        <input class="bank" id="{{ quiz_bank.id }}" type="checkbox" value="{{ quiz_bank.id }}" name="selected_bank" onchange="bankSelect({{ quiz_bank.id }});"> {{ quiz_bank.title }}
         <br>
-        {{field.lable}}
-        {{field}}
-
-        <input type = "hidden" name = "quiz_bank_id" value = "{{quiz_bank.id}}">
-        {% endfor %}
+        <br>
     {% endfor %}
 
     <br>
