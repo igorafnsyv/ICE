@@ -45,10 +45,10 @@ class Course(models.Model):
 
     # value 1 if course is opened, 0 if closed
     status = models.IntegerField(db_index=True, null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse('course_detail_url', kwargs={'id': self.id})
+        return reverse('course_detail_url', kwargs={'course_id': self.id})
 
     def __str__(self):
         return '{}'.format(self.title)
@@ -70,10 +70,10 @@ class Module(models.Model):
     title = models.CharField(max_length=150, db_index=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
     position = models.IntegerField(db_index=True, null=True, blank=True)
-    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
+    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, blank=True, null=True)
 
     def get_absolute_url(self):
-        return reverse('module_details_url', kwargs={'id': self.id})
+        return reverse('module_details_url', kwargs={'module_id': self.id})
 
     def __str__(self):
         return '{}'.format(self.title)

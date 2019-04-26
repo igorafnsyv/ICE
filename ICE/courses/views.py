@@ -3,7 +3,6 @@ from .models import Course, Module, Component, Learner, Instructor, Category, Co
 from quiz.models import QuizBank
 from django.http import HttpResponse
 from django.views.generic import View
-
 from .forms import ModuleForm, ComponentForm, CourseForm, ComponentUploadForm
 
 
@@ -99,12 +98,12 @@ def study_course(request, course_id):
                                                                  'learner': learner})
 
 
-def study_module(request, id):
+def study_module(request, module_id):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
     if not hasattr(request.user, 'learner'):
         return HttpResponse("<h1>You do not have access to this page</h1>")
-    module = Module.objects.get(id__iexact=id)
+    module = Module.objects.get(id__iexact=module_id)
     components = Component.objects.filter(module=module).order_by('position')
     quiz_bank = QuizBank.objects.get(module=module)
 
@@ -116,10 +115,10 @@ def study_module(request, id):
 
 
 # shows details of the particular course
-def course_detail(request, id):
+def course_detail(request, course_id):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
-    course = Course.objects.get(id__iexact=id)
+    course = Course.objects.get(id__iexact=course_id)
     modules = Module.objects.filter(course=course).order_by('position')
     components = []
     for module in modules:
@@ -203,9 +202,6 @@ def component_remove_module(request, component_id):
     return redirect(component.course)
 
 
-# class based view to override Post function
-
-
 # todo see if possible to merge with other similar functions
 def new_module_add_components(request, component_id, position, course_id):
     # if it is the first element, create a temporary module for it
@@ -247,7 +243,7 @@ class ModuleCreate(View):
         if module.exists():
             module = module[0]
         else:
-            Module.objects.create(title="temp",
+            Module.objects.create(title=request.POST['title'],
                                   instructor=request.user.instructor,
                                   course=course)
             module = Module.objects.all()[len(Module.objects.all()) - 1]
