@@ -12,9 +12,11 @@
 
 {% for completion in completion_records %}
 
-    <h3>{{ completion.course.title }}</h3>
+
 	<div id="completecourse">
+
 	<div id="infocourse">
+    <h2 style="color: black">{{ completion.course.title }}</h2>
     <h3>Credits Awarded: {{ completion.course.credit_units }} </h3>
     <h3>Completion Date:  {{ completion.date_completed }} </h3>
     <h3>Cumulative CECU after course was completed:  {{ completion.cumulative_credits }} </h3>
