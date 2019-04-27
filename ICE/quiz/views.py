@@ -21,7 +21,7 @@ class QuizAdd(View):
         if not hasattr(request.user, 'instructor'):
             return HttpResponse("<h1>You do not have access to this page</h1>")
         module = Module.objects.get(id__iexact=id)
-        quiz_banks = QuizBank.objects.filter(module=None)
+        quiz_banks = QuizBank.objects.filter(module=None, course=module.course)
         return render(request, 'quiz/add_existing_quiz_bank.html', context={'module': module,
                                                                             'quiz_banks': quiz_banks})
 
