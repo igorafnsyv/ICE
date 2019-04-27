@@ -63,7 +63,8 @@ class QuizTake(View):
                 if answer_result.correct_incorrect:
                     result += 1
 
-        if result / quiz_bank.required_questions_num >= pass_rate / 100:
+        # if result / quiz_bank.required_questions_num >= pass_rate / 100:
+        if result >= pass_rate:
 
             learner = request.user.learner
             learner.completed_modules.add(quiz_bank.module)
